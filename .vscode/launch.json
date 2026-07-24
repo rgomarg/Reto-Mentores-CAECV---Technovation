@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch BackendApplication",
+            "request": "launch",
+            "mainClass": "com.retoCAECV.backend.BackendApplication",
+            "projectName": "backend",
+            "env": {
+                "DB_URL": "jdbc:postgresql://localhost:5432/retoCAECV",
+                "DB_USER": "postgres",
+                "DB_PASSWORD": "postgres"
+            }
+        }
+    ]
+}
