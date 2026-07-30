@@ -1,9 +1,21 @@
-function App() {
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-blue-600">Prueba de que funciona Tailwind CSS</h1>
-    </div>
-  )
-}
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+// Imagina que has creado estos dos componentes en otros archivos:
+import Inicio from './pages/Inicio';
+import Agricultor from './pages/Agricultor'; 
 
-export default App
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Inicio />
+  },
+  {
+    path: "/agricultor/a",
+    element: <Agricultor />
+  }
+])
+
+function App() {
+  return <RouterProvider router={router} />;
+}
+export default App;

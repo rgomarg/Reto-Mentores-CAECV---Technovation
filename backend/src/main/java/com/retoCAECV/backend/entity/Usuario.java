@@ -1,4 +1,7 @@
 package com.retoCAECV.backend.entity;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity //esto va a ser una tabla en la BD
@@ -11,16 +14,19 @@ public class Usuario {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    //relaciones
+    @OneToMany (mappedBy = "usuario")
+    private List<UsuarioCromo> cromos = new ArrayList<>(); 
 
-    public Usuario(){
+    @OneToMany (mappedBy = "usuario")
+    private List<UsuarioPotenciador> potenciadores = new ArrayList<>(); 
 
-    }
 
-    public Usuario(String nombre, String email){
+    //Getters, setter, constructores
+    public Usuario(){ }
+
+    public Usuario(String nombre){
         this.nombre= nombre;
-        this.email=email;
     }
 
     public Long getId(){
@@ -33,11 +39,4 @@ public class Usuario {
         this.nombre=nombre;
     }
 
-    public String getEmail(){
-        return email;
-    }
-
-    public void setEmail(String email){
-        this.email=email;
-    }
 }
