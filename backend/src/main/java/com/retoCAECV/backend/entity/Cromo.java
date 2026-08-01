@@ -25,7 +25,7 @@ public class Cromo {
     @Column (nullable = false)
     private String nombre;
 
-    @Column (nullable = false)
+    @Column 
     private String imagen;
 
     @Column (nullable = false)

@@ -27,7 +27,7 @@ public class Potenciador {
     @Column (nullable = false)
     private String nombre;
 
-    @Column (nullable = false)
+    @Column 
     private String imagen;
 
     @Enumerated(EnumType.STRING)
