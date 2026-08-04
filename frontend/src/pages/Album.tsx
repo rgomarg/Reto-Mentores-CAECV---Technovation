@@ -1,9 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function Album() {
   // Array of 9 items for the 3x3 grid
   const items = Array.from({ length: 9 });
+  const {id} = useParams();
   const navigate= useNavigate();
 
   return (
@@ -11,7 +12,7 @@ export default function Album() {
       {/* Header Section */}
       <div className="flex flex-col px-6 pt-12 pb-4">
         <button className='rounded-3xl hover:bg-amber-600 self-start w-fit px-4 py-2 bg-black/10'
-                onClick={() => navigate('/dashboard')}>
+                onClick={() => navigate(-1)}>
           Volver
         </button>
         <h1 className="text-6xl font-extrabold text-center mb-6 tracking-tight">

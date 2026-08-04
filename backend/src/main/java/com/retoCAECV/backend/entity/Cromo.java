@@ -3,6 +3,8 @@ package com.retoCAECV.backend.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +39,7 @@ public class Cromo {
 
 
     //relaciones
+    @JsonIgnore
     @OneToMany(mappedBy = "cromo")
     private List<UsuarioCromo> usuarios = new ArrayList<>();
 

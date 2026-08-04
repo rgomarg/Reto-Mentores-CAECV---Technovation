@@ -12,4 +12,5 @@ public interface UsuarioPotenciadorRepository extends JpaRepository<UsuarioPoten
     List<UsuarioPotenciador> findByUsuario(Usuario usuario);
 
     Optional<UsuarioPotenciador> findByUsuarioAndPotenciador(Usuario usuario, Potenciador potenciador);
+    
 }

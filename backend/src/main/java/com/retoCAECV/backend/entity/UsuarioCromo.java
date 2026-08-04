@@ -2,6 +2,8 @@ package com.retoCAECV.backend.entity;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +33,7 @@ public class UsuarioCromo {
     private int cantidad; //cuántos repetidos tiene
 
     //relaciones
+    @JsonIgnore
     @ManyToOne 
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;

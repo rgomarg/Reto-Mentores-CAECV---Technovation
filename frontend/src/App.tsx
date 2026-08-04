@@ -29,11 +29,11 @@ const router = createBrowserRouter([
     element: <ProfileSelection />
   },
   {
-    path: "/dashboard",
+    path: "/dashboard/:id",
     element: <ProfileDashboard />
   },
   {
-    path: "/album",
+    path: "/dashboard/:id/album",
     element: <Album />
   },
   {
