@@ -3,8 +3,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Builder;
 
 @Entity //esto va a ser una tabla en la BD
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "usuarios") //le da el nombre de usuarios
 public class Usuario {
     @Id //es la Clave primaria
@@ -22,21 +32,6 @@ public class Usuario {
     private List<UsuarioPotenciador> potenciadores = new ArrayList<>(); 
 
 
-    //Getters, setter, constructores
-    public Usuario(){ }
-
-    public Usuario(String nombre){
-        this.nombre= nombre;
-    }
-
-    public Long getId(){
-        return id;
-    }
-    public String getNombre(){
-        return nombre;
-    }
-    public void setNombre(String nombre){
-        this.nombre=nombre;
-    }
+    
 
 }

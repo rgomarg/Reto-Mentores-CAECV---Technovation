@@ -10,6 +10,7 @@ import lombok.Builder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.retoCAECV.backend.enums.TipoPotenciadores;
 
 @Entity
@@ -27,7 +28,7 @@ public class Potenciador {
     @Column (nullable = false)
     private String nombre;
 
-    @Column (nullable = false)
+    @Column 
     private String imagen;
 
     @Enumerated(EnumType.STRING)
@@ -38,6 +39,7 @@ public class Potenciador {
     private String atributos[];
 
     //Relaciones
+    @JsonIgnore
     @OneToMany(mappedBy = "potenciador")
     private List<UsuarioPotenciador> usuarios = new ArrayList<>();
 

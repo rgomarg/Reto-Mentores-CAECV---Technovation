@@ -2,7 +2,14 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 // Imagina que has creado estos dos componentes en otros archivos:
 import Inicio from './pages/Inicio';
 import Agricultor from './pages/Agricultor'; 
+import CrearUsuarios from './pages/CrearUsuarios';
 
+// Nuevas pantallas del mockup
+import ProfileSelection from './pages/ProfileSelection';
+import ProfileDashboard from './pages/ProfileDashboard';
+import Album from './pages/Album';
+import Potenciadores from './pages/Potenciadores';
+import NfcScan from './pages/NfcScan';
 
 const router = createBrowserRouter([
   {
@@ -12,6 +19,30 @@ const router = createBrowserRouter([
   {
     path: "/agricultor/a",
     element: <Agricultor />
+  },
+  {
+    path:"/usuarios",
+    element: <CrearUsuarios/>
+  },
+  {
+    path: "/perfiles",
+    element: <ProfileSelection />
+  },
+  {
+    path: "/dashboard/:id",
+    element: <ProfileDashboard />
+  },
+  {
+    path: "/dashboard/:id/album",
+    element: <Album />
+  },
+  {
+    path: "/potenciadores",
+    element: <Potenciadores />
+  },
+  {
+    path: "/nfc/:id?",
+    element: <NfcScan />
   }
 ])
 

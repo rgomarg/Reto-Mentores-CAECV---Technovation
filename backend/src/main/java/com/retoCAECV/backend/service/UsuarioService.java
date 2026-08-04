@@ -1,18 +1,14 @@
 package com.retoCAECV.backend.service;
 
-import com.retoCAECV.backend.dto.request.UsuarioRequestDTO;
+import com.retoCAECV.backend.dto.request.CrearUsuarioRequestDTO;
+import com.retoCAECV.backend.dto.response.DatosUsuarioDashBoardResponse;
 import com.retoCAECV.backend.dto.response.UsuarioResponseDTO;
 
-import java.util.List;
+
+
 
 public interface UsuarioService {
+    UsuarioResponseDTO crearUsuario(CrearUsuarioRequestDTO requestusuarioDTO);
 
-    List<UsuarioResponseDTO> getAll();
-
-    UsuarioResponseDTO getById(Long id);
-
-    UsuarioResponseDTO guardar(UsuarioRequestDTO dto);
-
-    void eliminate(Long id);
-
+    DatosUsuarioDashBoardResponse cargarUsuarioDashboard(Long id);
 }

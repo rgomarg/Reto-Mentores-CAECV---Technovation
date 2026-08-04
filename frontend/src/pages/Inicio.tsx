@@ -10,8 +10,19 @@ function Inicio() {
       <Link to="/agricultor/a" className="mt-6 inline-block bg-green-600 text-white px-4 py-2 rounded">
         Como ser agricultor/a
       </Link>
+      <Link to="/usuarios" className="mt-6 inline-block bg-green-600 text-white px-4 py-2 rounded">
+        Crear usuario
+      </Link>
+
+      <div>
+        <Link to= "/perfiles" 
+              className="mt-6 inline-block bg-green-600 text-white px-4 py-2 rounded" >
+                Ir a perfiles
+        </Link>
+
+      </div>
     </div>
   );
 }
 
-export default Inicio; // <-- ¡Muy importante exportarlo!
+export default Inicio; 
