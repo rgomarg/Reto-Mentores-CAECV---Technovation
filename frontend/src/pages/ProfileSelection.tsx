@@ -4,11 +4,11 @@ export default function ProfileSelection() {
   const navigate = useNavigate();
 
   const perfiles = [
-    {id: 1, nombre: "Laura"},
-    {id: 2, nombre: "Raquel"},
+    {id: 1, nombre: "Raquel"},
+    {id: 2, nombre: "Laura"},
     {id: 3, nombre: "Sofia"},
-    {id: 4, nombre: "Alma"},
-    {id: 5, nombre: "Zoe"},
+    {id: 4, nombre: "Zoe"},
+    {id: 5, nombre: "Alma"},
   ]
 
   return (

@@ -10,6 +10,8 @@ import ProfileDashboard from './pages/ProfileDashboard';
 import Album from './pages/Album';
 import Potenciadores from './pages/Potenciadores';
 import NfcScan from './pages/NfcScan';
+import CromoDetalle from './pages/CromoDetalle';
+import NFCPage from './pages/NFCPage';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
   {
     path: "/nfc/:id?",
     element: <NfcScan />
+  },
+  {
+    path: "/nfc/cromo/:idCromo",
+    element: <NFCPage />
+  },
+  {
+    path: "/cromo/:id",
+    element: <CromoDetalle />
   }
 ])
 

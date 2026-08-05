@@ -12,7 +12,7 @@ export default function ProfileDashboard() {
 
   useEffect(() => {
     // Ajusta la URL si finalmente decidisteis usar /api o no
-    fetch(`http://localhost:8080/api/usuarios/${id}`)
+    fetch(`/api/usuarios/${id}`)
       .then(respuesta => respuesta.json())
       .then(datosDelBackend => {
         setDatosUsuario(datosDelBackend);
