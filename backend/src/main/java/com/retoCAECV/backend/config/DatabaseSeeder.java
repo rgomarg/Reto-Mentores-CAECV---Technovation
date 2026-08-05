@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+
 @Component
 @RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
@@ -97,25 +98,25 @@ public class DatabaseSeeder implements CommandLineRunner {
     private void crearCromos() {
         naranjita = cromoRepository.save(Cromo.builder()
                 .nombre("Naranjita")
-                .imagen("naranjita.png")
+                .imagen("naranja.jpg")
                 .puntuacion(15)
                 .build());
 
         lacteo = cromoRepository.save(Cromo.builder()
                 .nombre("Lacteo")
-                .imagen("lacteo.png")
+                .imagen("lacteo.jpg")
                 .puntuacion(5)
                 .build());
 
         miel = cromoRepository.save(Cromo.builder()
                 .nombre("Miel")
-                .imagen("miel.png")
+                .imagen("miel.jpeg")
                 .puntuacion(20)
                 .build());
 
         mermelada = cromoRepository.save(Cromo.builder()
                 .nombre("Mermelada")
-                .imagen("mermelada.png") // ¿Quizás querías mermelada.png?
+                .imagen("mermelada.jpg") 
                 .puntuacion(10)                
                 .build());
     }
@@ -127,13 +128,13 @@ public class DatabaseSeeder implements CommandLineRunner {
     private void crearPotenciadores() {
         doblePuntos = potenciadorRepository.save(Potenciador.builder()
                 .nombre("Doble Puntos")
-                .imagen("doblePuntos.png")
+                .imagen("potenciador.png")
                 .tipo(TipoPotenciadores.DUPLICAR)
                 .build());
 
         triplePuntos = potenciadorRepository.save(Potenciador.builder()
                 .nombre("Triple Puntos")
-                .imagen("triplePuntos.png")
+                .imagen("potenciador.png")
                 .tipo(TipoPotenciadores.TRIPLICAR)
                 .build());
     }
