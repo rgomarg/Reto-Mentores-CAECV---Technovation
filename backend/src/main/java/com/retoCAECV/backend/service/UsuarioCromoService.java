@@ -4,5 +4,6 @@ import com.retoCAECV.backend.dto.request.UsuarioCromoRequestDTO;
 import com.retoCAECV.backend.dto.response.UsuarioCromoResponseDTO;
 
 public interface UsuarioCromoService {
-    UsuarioCromoResponseDTO guardarCromoEnAlbum(UsuarioCromoRequestDTO usuarioCromoRequest);    
+    UsuarioCromoResponseDTO guardarCromoEnAlbum(UsuarioCromoRequestDTO usuarioCromoRequest);
+    void aplicarPotenciadorACromo(Long idUsuarioCromo, Long idPotenciador);    
 } 

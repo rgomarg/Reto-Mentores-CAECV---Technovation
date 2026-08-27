@@ -24,6 +24,8 @@ public class UsuarioCromoController {
         return usuarioCromoService.guardarCromoEnAlbum(ucRequest);
     }
 
-    
-    
+    @PostMapping("/aplicar-potenciador/{idUsuarioCromo}/{idPotenciador}")
+    public void aplicarPotenciadorACromo(@PathVariable Long idUsuarioCromo, @PathVariable Long idPotenciador) {
+        usuarioCromoService.aplicarPotenciadorACromo(idUsuarioCromo, idPotenciador);
+    }
 }

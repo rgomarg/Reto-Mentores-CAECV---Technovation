@@ -41,4 +41,8 @@ public class UsuarioCromo {
     @ManyToOne
     @JoinColumn (name = "cromo_id")
     private Cromo cromo;
+
+    @ManyToOne
+    @JoinColumn(name = "potenciador_aplicado_id")
+    private Potenciador potenciadorAplicado;
 }

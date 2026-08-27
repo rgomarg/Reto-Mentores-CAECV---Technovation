@@ -11,7 +11,17 @@ export default function Album() {
   const [loading, setLoading] = useState(!location.state?.cromos);
   const [destacadoId, setDestacadoId] = useState<number | null>(location.state?.nuevoCromoDestacado || null);
 
+  const [allCromos, setAllCromos] = useState<any[]>([]);
+
   useEffect(() => {
+    // Cargar catálogo completo
+    fetch('/api/cromos')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setAllCromos(data);
+      })
+      .catch(err => console.error("Error al cargar catálogo:", err));
+
     // Solo hacemos fetch si por algún casual se recarga la página, o si venimos de la página de NFC 
     // donde solo pasamos el nuevoCromoDestacado y no la lista entera de cromos
     if (!location.state?.cromos && id) {
@@ -25,6 +35,8 @@ export default function Album() {
           console.error("Error al cargar los cromos del usuario:", err);
           setLoading(false);
         });
+    } else {
+      setLoading(false);
     }
   }, [id, location.state]);
 
@@ -42,6 +54,10 @@ export default function Album() {
   const lastIndexDestacado = destacadoId 
     ? userCromos.map(u => u.cromo.id).lastIndexOf(destacadoId) 
     : -1;
+
+  // Calculamos los cromos que NO tiene el usuario
+  const ownedCromoIds = new Set(userCromos.map(uc => uc.cromo.id));
+  const unownedCromos = allCromos.filter(c => !ownedCromoIds.has(c.id));
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#a8e6a3] to-[#80d07b] flex flex-col font-sans text-black pb-8">
@@ -66,24 +82,33 @@ export default function Album() {
       <div className="p-6 flex-grow flex justify-center">
         {loading ? (
           <p className="text-xl font-bold mt-10">Cargando tu colección...</p>
-        ) : userCromos.length === 0 ? (
-          <p className="text-xl font-bold mt-10 text-center text-emerald-900">Aún no tienes ningún cromo en tu álbum.</p>
         ) : (
           <div className="grid grid-cols-3 gap-4 w-full max-w-md items-start">
+            {/* Cromos del usuario */}
             {userCromos.map((uc: any, index: number) => {
               const cromo = uc.cromo;
               const isDestacado = index === lastIndexDestacado;
+              const hasPotenciador = uc.potenciadorAplicado != null;
               
               return (
                 <div 
                   key={uc.id}
-                  onClick={() => navigate(`/cromo/${cromo.id}`)}
-                  className={`aspect-[3/4] border-[2px] flex flex-col items-center justify-center p-2 shadow-sm transition duration-200 cursor-pointer 
+                  onClick={() => navigate(`/cromo/${cromo.id}`, { state: { usuarioCromo: uc, usuarioId: id } })}
+                  className={`aspect-[3/4] border-[2px] flex flex-col items-center justify-center p-2 shadow-sm transition duration-200 cursor-pointer relative
                     ${isDestacado 
                       ? 'border-yellow-400 bg-yellow-100 scale-105 shadow-yellow-400/50 shadow-lg animate-pulse z-10' 
-                      : 'border-[#3b873e] bg-[#a8e6a3] hover:scale-105 hover:shadow-md'
+                      : hasPotenciador
+                        ? 'border-blue-500 bg-blue-50 shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-105'
+                        : 'border-[#3b873e] bg-[#a8e6a3] hover:scale-105 hover:shadow-md'
                     }`}
                 >
+                  {hasPotenciador && (
+                     <div className="absolute -top-2 -right-2 text-blue-600 bg-white rounded-full p-1 shadow-md border border-blue-200">
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                     </div>
+                  )}
                   <div className="w-full flex-grow bg-white/50 border border-black/20 rounded flex items-center justify-center mb-1 overflow-hidden p-1">
                     <img src={`/${cromo.imagen}`} alt={cromo.nombre} className="w-full h-full object-contain" />
                   </div>
@@ -93,6 +118,22 @@ export default function Album() {
                 </div>
               );
             })}
+            
+            {/* Cromos faltantes */}
+            {unownedCromos.map(cromo => (
+               <div 
+                 key={`unowned-${cromo.id}`}
+                 onClick={() => navigate(`/cromo/${cromo.id}`)}
+                 className="aspect-[3/4] border-[2px] border-[#3b873e] bg-[#a8e6a3] grayscale opacity-60 flex flex-col items-center justify-center p-2 shadow-sm cursor-pointer hover:opacity-80 transition"
+               >
+                 <div className="w-full flex-grow bg-white/50 border border-black/20 rounded flex items-center justify-center mb-1 overflow-hidden p-1">
+                   <img src={`/${cromo.imagen}`} alt={cromo.nombre} className="w-full h-full object-contain" />
+                 </div>
+                 <span className="text-xs font-bold text-center w-full truncate border-t border-black/20 pt-1">
+                   {cromo.nombre}
+                 </span>
+               </div>
+            ))}
           </div>
         )}
       </div>

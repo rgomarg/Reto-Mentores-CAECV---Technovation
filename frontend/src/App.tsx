@@ -39,7 +39,7 @@ const router = createBrowserRouter([
     element: <Album />
   },
   {
-    path: "/potenciadores",
+    path: "/dashboard/:id/potenciadores",
     element: <Potenciadores />
   },
   {

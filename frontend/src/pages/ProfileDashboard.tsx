@@ -94,7 +94,7 @@ export default function ProfileDashboard() {
 
           {/* Tarjeta Potenciadores */}
           <button 
-            onClick={() => navigate('/potenciadores')}
+            onClick={() => navigate(`/dashboard/${id}/potenciadores`, { state: { potenciadores: datosUsuario.usuarioPotenciadores} })}
             className="flex-1 w-full aspect-[1/1.6] border-[3px] border-black bg-transparent hover:bg-black/5 transition duration-300 flex flex-col items-center pt-8 px-1"
           >
             <span className="text-lg font-bold mb-10 text-center break-words leading-tight">Potenciadores</span>

@@ -8,6 +8,7 @@ import com.retoCAECV.backend.entity.UsuarioCromo;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioCromoMapper {
+    
     UsuarioCromo toEntity(UsuarioCromoRequestDTO usuarioCromoRequest);
     UsuarioCromoResponseDTO toResponse(UsuarioCromo usuarioCromo);
 }

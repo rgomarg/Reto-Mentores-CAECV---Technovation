@@ -49,9 +49,29 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<UsuarioCromo> usuarioCromos= usuarioCromoRepository.findByUsuario(usuario);
         List<UsuarioPotenciador> usuarioPotenciadores = usuarioPotenciadorRepository.findByUsuario(usuario);
 
-        int puntuacionUsuario= 0;
-        for(UsuarioCromo uc: usuarioCromos){
-            puntuacionUsuario+= uc.getCantidad() * uc.getCromo().getPuntuacion();
+        int puntuacionUsuario = 0;
+        for (UsuarioCromo uc : usuarioCromos) {
+            int puntosDeEsteCromo = uc.getCromo().getPuntuacion();
+
+            // Aplicar modificador si el cromo tiene un potenciador aplicado
+            if (uc.getPotenciadorAplicado() != null) {
+                switch (uc.getPotenciadorAplicado().getTipo()) {
+                    case DUPLICAR:
+                        puntosDeEsteCromo *= 2;
+                        break;
+                    case TRIPLICAR:
+                        puntosDeEsteCromo *= 3;
+                        break;
+                    case MAS_CUATRO:
+                        puntosDeEsteCromo += 4;
+                        break;
+                    case MAS_OCHO:
+                        puntosDeEsteCromo += 8;
+                        break;
+                }
+            }
+
+            puntuacionUsuario += (uc.getCantidad() * puntosDeEsteCromo);
         }
 
         response.setNCromos(usuarioCromos.size());

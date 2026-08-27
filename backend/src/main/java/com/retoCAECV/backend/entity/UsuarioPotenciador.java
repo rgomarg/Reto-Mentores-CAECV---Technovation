@@ -28,6 +28,9 @@ public class UsuarioPotenciador {
     @Column (nullable = false)
     private int cantidad;
 
+    @Column (nullable = false, columnDefinition = "integer default 0")
+    private int cantidadUsada = 0;
+
     //Relaciones
     @JsonIgnore
     @ManyToOne
