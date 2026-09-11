@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useUser } from '../context/UserContext';
-import type { UserProfile } from '../context/types';
+import type { UserProfile } from '../context/UserContext';
 
 export default function ProfileDashboard() {
   const navigate = useNavigate();
@@ -17,7 +17,9 @@ export default function ProfileDashboard() {
     return null;
   });
   const [loading, setLoading] = useState<boolean>(!userData);
+  const [totalCromos, setTotalCromos] = useState<number>(20);
 
+  // Cargar datos del usuario desde la API
   useEffect(() => {
     let isMounted = true;
     if (activeId) {
@@ -42,7 +44,6 @@ export default function ProfileDashboard() {
         })
         .catch(() => {
           if (isMounted) {
-            // Si falla la API o estamos offline, fallback a los datos del contexto o diseño
             setUserData(currentUser);
           }
         })
@@ -57,12 +58,29 @@ export default function ProfileDashboard() {
     };
   }, [activeId, currentUser]);
 
+  // Cargar el total de cromos disponibles en la BBDD
+  useEffect(() => {
+    fetch('/api/cromos')
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw new Error('Error');
+      })
+      .then((data: unknown) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setTotalCromos(data.length);
+        }
+      })
+      .catch(() => {
+        // Mantener el valor por defecto (20)
+      });
+  }, []);
+
   const displayUser = userData || currentUser;
   const nombre = displayUser?.nombre || 'Nombre';
   const initial = nombre.charAt(0).toUpperCase();
-  const puntos = displayUser?.puntuacionUsuario ?? 55;
-  const cromosCount = displayUser?.nCromos ?? 4;
-  const totalCromos = 20;
+  const puntos = displayUser?.puntuacionUsuario ?? 0;
+  const cromosCount = displayUser?.usuarioCromos?.length ?? displayUser?.nCromos ?? 0;
+
 
   return (
     <div className="min-h-screen bg-[#FAF8EB] flex flex-col font-sans text-gray-900 antialiased selection:bg-amber-200">

@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 
 interface NavbarProps {
-  activeTab?: 'inicio' | 'batallas' | 'album';
+  activeTab?: 'inicio' | 'batallas' | 'album' | 'perfil';
 }
 
 export default function Navbar({ activeTab }: NavbarProps) {

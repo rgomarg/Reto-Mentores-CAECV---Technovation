@@ -76,7 +76,7 @@ export default function CromoDetalle() {
         </button>
 
         <h1 className="text-lg sm:text-xl font-bold text-black tracking-tight">
-          {cromo?.id === 3 ? 'Pokemon ecológico' : (cromo?.nombre || 'Detalle de Carta')}
+          {cromo?.nombre || 'Detalle de Carta'}
         </h1>
       </section>
 
