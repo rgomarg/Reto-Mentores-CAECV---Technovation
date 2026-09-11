@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
+interface CromoInfo {
+  nombre?: string;
+  imagen?: string;
+  [key: string]: unknown;
+}
 
 export default function NFCPage() {
   const { idCromo } = useParams();
   const navigate = useNavigate();
-  const [cromo, setCromo] = useState<any>(null);
+  const [cromo, setCromo] = useState<CromoInfo | null>(null);
   const [estado, setEstado] = useState<'sobre' | 'abriendo' | 'revelado'>('sobre');
   const [guardando, setGuardando] = useState(false);
 

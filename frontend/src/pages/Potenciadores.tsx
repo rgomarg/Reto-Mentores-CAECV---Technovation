@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function Potenciadores() {
   // Array of 9 items for the 3x3 grid

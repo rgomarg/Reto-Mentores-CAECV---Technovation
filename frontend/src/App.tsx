@@ -1,16 +1,19 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-// Imagina que has creado estos dos componentes en otros archivos:
+import { UserProvider } from './context/UserContext';
+
+// Páginas principales del diseño de 4 pantallas
 import Inicio from './pages/Inicio';
+import Album from './pages/Album';
+import CromoDetalle from './pages/CromoDetalle';
+import Batallas from './pages/Batallas';
+
+// Otras páginas existentes del proyecto
 import Agricultor from './pages/Agricultor'; 
 import CrearUsuarios from './pages/CrearUsuarios';
-
-// Nuevas pantallas del mockup
 import ProfileSelection from './pages/ProfileSelection';
 import ProfileDashboard from './pages/ProfileDashboard';
-import Album from './pages/Album';
 import Potenciadores from './pages/Potenciadores';
 import NfcScan from './pages/NfcScan';
-import CromoDetalle from './pages/CromoDetalle';
 import NFCPage from './pages/NFCPage';
 
 const router = createBrowserRouter([
@@ -19,12 +22,24 @@ const router = createBrowserRouter([
     element: <Inicio />
   },
   {
+    path: "/album",
+    element: <Album />
+  },
+  {
+    path: "/batallas",
+    element: <Batallas />
+  },
+  {
+    path: "/cromo/:id",
+    element: <CromoDetalle />
+  },
+  {
     path: "/agricultor/a",
     element: <Agricultor />
   },
   {
-    path:"/usuarios",
-    element: <CrearUsuarios/>
+    path: "/usuarios",
+    element: <CrearUsuarios />
   },
   {
     path: "/perfiles",
@@ -49,14 +64,15 @@ const router = createBrowserRouter([
   {
     path: "/nfc/cromo/:idCromo",
     element: <NFCPage />
-  },
-  {
-    path: "/cromo/:id",
-    element: <CromoDetalle />
   }
-])
+]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
+  );
 }
+
 export default App;

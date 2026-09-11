@@ -1,110 +1,118 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import CardVisual from '../components/CardVisual';
+import ModifierSidebar from '../components/ModifierSidebar';
+import { useUser } from '../context/UserContext';
+import { INITIAL_CARDS, type ExtendedCromoData } from '../data/cardsData';
 
 export default function CromoDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [cromo, setCromo] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const { currentUser } = useUser();
 
+  // Estado del cromo con fallback robusto garantizado
+  const [cromo, setCromo] = useState<ExtendedCromoData>(() => {
+    if (location.state?.card) {
+      return location.state.card;
+    }
+    const targetId = id ? parseInt(id, 10) : 3;
+    const found = INITIAL_CARDS.find((c) => c?.id === targetId);
+    return found || INITIAL_CARDS[2]; // Default a Alolan Vulpix (ID 3, igual a Desktop - 3)
+  });
+
+  // Estado del panel de modificadores (Desktop - 5)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [modifierBoost, setModifierBoost] = useState<number>(0);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Cargar datos de la API de forma segura si no los teníamos por state
   useEffect(() => {
-    fetch(`/api/cromos/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setCromo(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error al cargar el cromo:", err);
-        setLoading(false);
-      });
-  }, [id]);
+    if (!location.state?.card && id) {
+      fetch(`/api/cromos/${id}`)
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw new Error('No encontrado');
+        })
+        .then((data) => {
+          if (data && typeof data === 'object') {
+            setCromo((prev) => ({
+              ...prev,
+              id: parseInt(id, 10),
+              nombre: data.nombre || prev?.nombre || 'Cromo',
+              imagen: data.imagen || prev?.imagen,
+              puntuacion: data.puntuacion ?? prev?.puntuacion ?? 15,
+              atributos: Array.isArray(data.atributos) && data.atributos.length ? data.atributos : prev?.atributos,
+            }));
+          }
+        })
+        .catch(() => {
+          // Mantener el cromo por defecto
+        });
+    }
+  }, [id, location.state]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black/90 flex flex-col items-center justify-center p-4">
-        <p className="text-white text-xl">Cargando cromo...</p>
-      </div>
-    );
-  }
-
-  if (!cromo) {
-    return (
-      <div className="min-h-screen bg-black/90 flex flex-col items-center justify-center p-4">
-        <p className="text-white text-xl">Cromo no encontrado</p>
-        <button onClick={() => navigate(-1)} className="mt-4 bg-white text-black px-4 py-2 rounded">Volver</button>
-      </div>
-    );
-  }
+  const handleApplyModifier = (modifier: { nombre?: string; puntos?: number }) => {
+    setModifierBoost((prev) => prev + (modifier?.puntos ?? 4));
+    setIsSidebarOpen(false);
+    setToastMessage(`¡Modificador "${modifier?.nombre || 'Bonus'}" aplicado con éxito!`);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
 
   return (
-    <div className="min-h-screen bg-black/90 flex flex-col items-center justify-center p-4 relative font-sans text-black overflow-hidden">
-      
-      {/* Botón X de cerrar */}
-      <button 
-        onClick={() => navigate(-1)}
-        className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/40 transition-colors z-50 text-2xl font-bold"
-      >
-        ✕
-      </button>
+    <div className="min-h-screen bg-[#FAF8EB] flex flex-col font-sans text-gray-900 antialiased selection:bg-amber-200 relative pb-12">
+      {/* Navbar Superior */}
+      <Navbar activeTab="album" />
 
-      {/* Contenedor de la carta con perspectiva 3D */}
-      <div className="w-full max-w-sm aspect-[3/4] perspective-[1000px] cursor-pointer" onClick={() => setIsFlipped(!isFlipped)}>
-        
-        {/* Elemento que rota */}
-        <div className={`relative w-full h-full transition-transform duration-700 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-          
-          {/* CARA FRONTAL */}
-          <div className="absolute w-full h-full backface-hidden bg-[#a8e6a3] border-4 border-[#3b873e] rounded-xl flex flex-col shadow-2xl p-4">
-            {/* Imagen del cromo */}
-            <div className="w-full h-1/2 border-2 border-black flex items-center justify-center bg-white/50 mb-2 overflow-hidden rounded">
-              <img src={`/${cromo.imagen}`} alt={cromo.nombre} className="w-full h-full object-contain drop-shadow-md" />
-            </div>
-            
-            {/* Nombre */}
-            <h2 className="text-3xl font-extrabold text-center border-b-2 border-black pb-2 mb-4 drop-shadow-sm">
-              {cromo.nombre}
-            </h2>
-            
-            {/* Propiedades */}
-            <div className="flex flex-col gap-2 flex-grow justify-center px-2 text-xl font-medium">
-              {cromo.atributos && cromo.atributos.map((attr: string, index: number) => (
-                <div key={index}>Propiedad {index + 1}: <span className="font-normal text-emerald-900">{attr}</span></div>
-              ))}
-              {(!cromo.atributos || cromo.atributos.length === 0) && (
-                <div className="text-center text-sm opacity-60">Sin propiedades</div>
-              )}
-            </div>
-          </div>
+      {/* Subheader: Botón Volver + Título "Pokemon ecológico" (Desktop - 3) */}
+      <section className="w-full max-w-5xl mx-auto px-6 pt-6 pb-2 flex items-center gap-3">
+        <button
+          onClick={() => navigate('/album')}
+          className="w-8 h-8 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black/10 active:scale-95 transition cursor-pointer"
+          title="Volver al Álbum"
+        >
+          <span className="text-sm font-bold">←</span>
+        </button>
 
-          {/* CARA TRASERA */}
-          <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-[#a8e6a3] border-4 border-[#3b873e] rounded-xl flex flex-col shadow-2xl p-6">
-            <h2 className="text-4xl font-extrabold text-center border-b-2 border-black pb-4 mb-6">
-              {cromo.nombre}
-            </h2>
-            
-            <div className="flex-grow flex items-center justify-center text-center text-xl font-medium px-4 text-emerald-950 leading-relaxed overflow-y-auto">
-              <p>
-                {/* Asumimos que podemos poner una descripción aquí más adelante, por ahora texto de divulgación fijo o basado en el nombre */}
-                Información extra sobre {cromo.nombre}. Este espacio está pensado para la parte de divulgación que habremos buscado. 
-              </p>
-            </div>
-            
-            <div className="text-center text-sm opacity-50 font-bold mt-4">
-              Toca para girar
-            </div>
-          </div>
+        <h1 className="text-lg sm:text-xl font-bold text-black tracking-tight">
+          {cromo?.id === 3 ? 'Pokemon ecológico' : (cromo?.nombre || 'Detalle de Carta')}
+        </h1>
+      </section>
 
+      {/* Centro: Carta Ampliada + Botón "Añadir modificador" */}
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-4 sm:py-6">
+        {/* Contenedor de la carta ampliada */}
+        <div className="relative transform hover:scale-[1.01] transition-transform duration-300">
+          <CardVisual card={cromo} size="lg" modifierBoost={modifierBoost} />
         </div>
-      </div>
-      
-      {!isFlipped && (
-        <div className="absolute bottom-10 text-white/50 animate-pulse text-lg font-medium">
-          Toca la carta para girarla
+
+        {/* Botón Inferior: "Añadir modificador" */}
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="bg-[#CCD5A2] hover:bg-[#BFCA91] active:scale-98 text-gray-800 font-semibold px-8 py-2.5 rounded-xl shadow-xs border border-[#BAC58B] transition-all text-sm sm:text-base cursor-pointer"
+          >
+            Añadir modificador
+          </button>
+        </div>
+      </main>
+
+      {/* Mensaje Toast de éxito al aplicar modificador */}
+      {toastMessage && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900/95 backdrop-blur-xs text-white px-5 py-2.5 rounded-full shadow-2xl text-xs sm:text-sm font-semibold flex items-center gap-2 z-50 animate-in fade-in slide-in-from-bottom-4">
+          <span className="text-amber-400">✨</span>
+          <span>{toastMessage}</span>
         </div>
       )}
 
+      {/* Panel Lateral de Modificadores (Desktop - 5) */}
+      <ModifierSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        onApplyModifier={handleApplyModifier}
+        usuarioPotenciadores={currentUser?.usuarioPotenciadores || []}
+      />
     </div>
   );
 }

@@ -1,111 +1,152 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
+import Navbar from '../components/Navbar';
+import { useUser } from '../context/UserContext';
+import type { UserProfile } from '../context/types';
 
 export default function ProfileDashboard() {
   const navigate = useNavigate();
-  // Extraemos el id de la URL (Asegúrate de que en App.tsx la ruta sea /dashboard/:idUsuario)
   const { id } = useParams();
-  
-  // Le decimos a TypeScript que puede ser <any> para que no se queje del null inicial
-  const [datosUsuario, setDatosUsuario] = useState<any>(null);
+  const { currentUser, currentUserId } = useUser();
+
+  const activeId = id ? parseInt(id, 10) : currentUserId;
+  const [userData, setUserData] = useState<UserProfile | null>(() => {
+    if (!id || parseInt(id, 10) === currentUser?.id) {
+      return currentUser;
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState<boolean>(!userData);
 
   useEffect(() => {
-    // Ajusta la URL si finalmente decidisteis usar /api o no
-    fetch(`/api/usuarios/${id}`)
-      .then(respuesta => respuesta.json())
-      .then(datosDelBackend => {
-        setDatosUsuario(datosDelBackend);
-      });
-  }, [id]);
+    let isMounted = true;
+    if (activeId) {
+      setLoading(true);
+      fetch(`/api/usuarios/${activeId}`)
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw new Error('Error al cargar perfil');
+        })
+        .then((data) => {
+          if (isMounted && data) {
+            setUserData({
+              id: activeId,
+              nombre: data.nombre,
+              puntuacionUsuario: data.puntuacionUsuario ?? 0,
+              nCromos: data.nCromos ?? 0,
+              nPotenciadores: data.nPotenciadores ?? 0,
+              usuarioCromos: data.usuarioCromos || [],
+              usuarioPotenciadores: data.usuarioPotenciadores || [],
+            });
+          }
+        })
+        .catch(() => {
+          if (isMounted) {
+            // Si falla la API o estamos offline, fallback a los datos del contexto o diseño
+            setUserData(currentUser);
+          }
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [activeId, currentUser]);
 
-
-  if (datosUsuario == null) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-        <p className="text-xl font-semibold">Cargando datos... </p>
-      </div>
-    );
-  }
+  const displayUser = userData || currentUser;
+  const nombre = displayUser?.nombre || 'Nombre';
+  const initial = nombre.charAt(0).toUpperCase();
+  const puntos = displayUser?.puntuacionUsuario ?? 55;
+  const cromosCount = displayUser?.nCromos ?? 4;
+  const totalCromos = 20;
 
   return (
-    // 1. Fondo principal gris de toda la pantalla de ordenador
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center font-sans text-black py-4">
-      
-      {/* 2. Contenedor que simula la pantalla del móvil */}
-      <div className="w-full max-w-[450px] min-h-[800px] bg-gradient-to-b from-[#a8e6a3] to-[#80d07b] flex flex-col shadow-2xl sm:rounded-[40px] overflow-hidden relative">
-          
-        {/* Botón Volver (Flotante) */}
-        <button 
-          className='absolute top-6 left-6 rounded-3xl hover:bg-black/20 px-4 py-2 bg-black/10 text-sm font-medium transition'
-          onClick={() => navigate('/perfiles')}
-        >
-          Volver
-        </button>
+    <div className="min-h-screen bg-[#FAF8EB] flex flex-col font-sans text-gray-900 antialiased selection:bg-amber-200">
+      {/* Navbar Superior con highlight en el avatar del perfil */}
+      <Navbar activeTab="perfil" />
 
-        {/* Cabecera (Avatar + Stats) */}
-        <div className="flex flex-row w-full border-b-[3px] border-black mt-20 pb-8 px-4">
-          
-          {/* Lado Izquierdo: Avatar y Nombre */}
-          <div className="flex flex-col items-center justify-center w-1/2 pr-2">
-            <div className="w-24 h-24 rounded-full border-[4px] border-black flex items-center justify-center mb-3 bg-transparent">
-              <svg className="w-14 h-14 text-black" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5zm0 12c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
+      {/* Contenido Principal del Perfil */}
+      <main className="flex-grow flex flex-col items-center justify-between px-6 pt-10 pb-8 max-w-4xl mx-auto w-full">
+        {/* Cabecera del Usuario: Gran Avatar Coral + Nombre */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#DE6B58] text-white font-black text-3xl sm:text-4xl flex items-center justify-center shadow-sm select-none transition-transform duration-300 hover:scale-105">
+            {initial}
+          </div>
+          <h1 className="text-xl sm:text-2xl font-black text-black tracking-tight mt-3">
+            {nombre}
+          </h1>
+        </div>
+
+        {/* Cuadrícula 2x2 de Estadísticas / Tarjetas Blancas */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 w-full max-w-2xl mb-12">
+          {/* Tarjeta 1: Puntos totales */}
+          <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-xs border border-gray-100 flex flex-col justify-center transition-all hover:shadow-md">
+            <span className="text-3xl sm:text-4xl font-black text-black tracking-tight mb-1">
+              {puntos}
+            </span>
+            <span className="text-xs sm:text-sm font-bold text-black tracking-tight">
+              Puntos totales
+            </span>
+          </div>
+
+          {/* Tarjeta 2: Álbum completo */}
+          <div 
+            onClick={() => navigate('/album')}
+            className="bg-white rounded-2xl p-6 sm:p-7 shadow-xs border border-gray-100 flex flex-col justify-center cursor-pointer transition-all hover:shadow-md hover:border-amber-200 group"
+          >
+            <span className="text-3xl sm:text-4xl font-black text-black tracking-tight mb-1 group-hover:text-amber-600 transition-colors">
+              {cromosCount} / {totalCromos}
+            </span>
+            <span className="text-xs sm:text-sm font-bold text-black tracking-tight">
+              Álbum completo
+            </span>
+          </div>
+
+          {/* Tarjeta 3: Boss derrotados */}
+          <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-xs border border-gray-100 flex flex-col justify-center transition-all hover:shadow-md">
+            <span className="text-3xl sm:text-4xl font-black text-black tracking-tight mb-1">
+              4
+            </span>
+            <span className="text-xs sm:text-sm font-bold text-black tracking-tight">
+              Boss derrotados
+            </span>
+          </div>
+
+          {/* Tarjeta 4: Racha */}
+          <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-xs border border-gray-100 flex flex-col justify-center transition-all hover:shadow-md">
+            <span className="text-3xl sm:text-4xl font-black text-black tracking-tight mb-1">
+              5 días
+            </span>
+            <span className="text-xs sm:text-sm font-bold text-black tracking-tight">
+              Racha
+            </span>
+          </div>
+        </div>
+
+        {/* Indicador de carga discreto */}
+        {loading && (
+          <p className="text-xs text-gray-400 animate-pulse mb-4">Sincronizando perfil con BBDD...</p>
+        )}
+
+        {/* Enlace Inferior Derecho: Datos personales -> */}
+        <div className="w-full flex justify-end">
+          <button
+            onClick={() => navigate('/perfiles')}
+            className="flex items-center gap-2 text-black font-extrabold text-sm sm:text-base hover:opacity-80 active:scale-98 transition group cursor-pointer"
+          >
+            <span>Datos personales</span>
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-center leading-tight">
-              Bienvenidx,<br/>{datosUsuario.nombre}
-            </h2>
-          </div>
-
-          {/* Lado Derecho: Estadísticas */}
-          <div className="flex flex-col justify-center w-1/2 border-l-[3px] border-black pl-4 text-sm font-medium gap-3">
-            <div className="flex justify-between">
-              <span>Puntos:</span>
-              <span className="font-bold">{datosUsuario.puntuacionUsuario}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Nº Cromos:</span>
-              <span className="font-bold">{datosUsuario.nCromos}</span>
-            </div>
-            <div className="flex justify-between text-xs sm:text-sm">
-              <span>Nº Poten:</span>
-              <span className="font-bold">{datosUsuario.nPotenciadores}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Tarjetas de Acción (Álbum y Potenciadores) */}
-        <div className="flex flex-row justify-center gap-4 p-6 flex-grow items-start mt-2">
-          
-          {/* Tarjeta Album */}
-          <button 
-            // Pasamos los cromos por el estado de React Router para usarlos mañana
-            onClick={() => navigate(`/dashboard/${id}/album`, { state: { cromos: datosUsuario.usuarioCromos} })}
-            className="flex-1 w-full aspect-[1/1.6] border-[3px] border-black bg-transparent hover:bg-black/5 transition duration-300 flex flex-col items-center pt-8"
-          >
-            <span className="text-2xl font-bold mb-10">Album</span>
-            <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 10h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z" />
-              <path d="M6 10V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
-              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            </svg>
-          </button>
-
-          {/* Tarjeta Potenciadores */}
-          <button 
-            onClick={() => navigate('/potenciadores')}
-            className="flex-1 w-full aspect-[1/1.6] border-[3px] border-black bg-transparent hover:bg-black/5 transition duration-300 flex flex-col items-center pt-8 px-1"
-          >
-            <span className="text-lg font-bold mb-10 text-center break-words leading-tight">Potenciadores</span>
-            <svg className="w-20 h-20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 17L17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
           </button>
         </div>
-
-      </div>
+      </main>
     </div>
   );
 }
