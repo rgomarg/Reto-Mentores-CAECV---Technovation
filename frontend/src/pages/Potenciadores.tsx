@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 export default function Potenciadores() {
   const { id } = useParams();
@@ -11,18 +12,15 @@ export default function Potenciadores() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Fetch de todos los potenciadores del catálogo
     fetch('/api/potenciadores')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
           setAllPotenciadores(data);
         } else {
-          console.error("El backend no devolvió un array:", data);
           setAllPotenciadores([]);
         }
         
-        // 2. Si no teníamos los del usuario (ej. refrescar página), los pedimos también
         if (!location.state?.potenciadores && id) {
           return fetch(`/api/usuarios/${id}`)
             .then(res => res.json())
@@ -35,7 +33,6 @@ export default function Potenciadores() {
       .finally(() => setLoading(false));
   }, [id, location.state]);
 
-  // Preparamos la lista de cartas a dibujar
   const cardsToRender: { potenciador: any; isOwned: boolean; isUsado: boolean; uniqueKey: string }[] = [];
 
   allPotenciadores.forEach(potenciador => {
@@ -53,52 +50,45 @@ export default function Potenciadores() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#a8e6a3] to-[#80d07b] flex flex-col font-sans text-black pb-8">
-      {/* Header Section */}
-      <div className="flex flex-col px-6 pt-12 pb-4">
-        <button className='rounded-3xl hover:bg-amber-600 self-start w-fit px-4 py-2 bg-black/10 mb-2'
-                onClick={() => navigate(-1)}>
-          Volver
-        </button>
-        <h1 className="text-5xl font-extrabold text-center mb-6 tracking-tight px-2 break-words">Potenciadores</h1>
-        <div className="text-right text-lg font-medium pr-2">
-          Filtro: Todos
-        </div>
+    <div className="min-h-screen bg-[#FCF6DF] flex flex-col font-sans text-[#1C201C] pb-8">
+      
+      {/* Menú Global */}
+      <Navbar />
+
+      {/* Cabecera de Sección */}
+      <div className="flex flex-col px-4 md:px-8 pt-8 pb-4">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight px-2 break-words text-center md:text-left">
+          Modificadores
+        </h1>
       </div>
 
-      {/* Divider */}
-      <div className="w-full h-[2px] bg-black"></div>
-
       {/* Grid Content */}
-      <div className="p-6 flex-grow flex justify-center">
+      <div className="px-4 md:px-8 flex-grow flex justify-center w-full">
         {loading ? (
           <p className="text-xl font-bold mt-10">Cargando catálogo...</p>
         ) : allPotenciadores.length === 0 ? (
-          <p className="text-xl font-bold mt-10 text-center text-emerald-900">No hay potenciadores disponibles en el juego aún.</p>
+          <p className="text-xl font-medium mt-10 text-center">No hay modificadores disponibles en el juego aún.</p>
         ) : (
-          <div className="grid grid-cols-3 gap-4 w-full max-w-md items-start">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 w-full max-w-6xl items-start">
             {cardsToRender.map(card => {
               return (
                 <div 
                   key={card.uniqueKey}
-                  className={`aspect-[3/4] border-[2px] flex flex-col items-center justify-center p-2 shadow-sm transition duration-200 relative overflow-hidden
-                    ${card.isOwned && !card.isUsado ? 'border-[#3b873e] bg-[#a8e6a3] hover:scale-105 cursor-pointer hover:shadow-md' : ''}
-                    ${card.isOwned && card.isUsado ? 'border-blue-500 bg-blue-800 shadow-[0_0_15px_blue] opacity-90 cursor-not-allowed' : ''}
-                    ${!card.isOwned ? 'border-[#3b873e] bg-[#a8e6a3] grayscale opacity-60' : ''}`}
+                  className={`aspect-[3/4] border-[2px] flex flex-col items-center justify-center p-2 shadow-sm transition duration-200 relative overflow-hidden rounded-md
+                    ${card.isOwned && !card.isUsado ? 'border-[#C1C69A] bg-[#C1C69A]/10 hover:scale-105 cursor-pointer hover:shadow-md' : ''}
+                    ${card.isOwned && card.isUsado ? 'border-gray-500 bg-gray-200 shadow-none opacity-80 cursor-not-allowed grayscale-[50%]' : ''}
+                    ${!card.isOwned ? 'border-transparent bg-white grayscale opacity-50' : ''}`}
                 >
                   {card.isUsado && (
-                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10 rounded">
-                        <span className="text-white font-black text-lg rotate-[-20deg] border-2 border-white px-2 py-1 uppercase tracking-widest shadow-xl bg-blue-600/80 backdrop-blur-sm">
+                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10 rounded">
+                        <span className="text-white font-black text-sm md:text-base rotate-[-20deg] border-2 border-white px-2 py-1 uppercase tracking-widest shadow-lg bg-gray-800/80 backdrop-blur-sm">
                            USADO
                         </span>
                      </div>
                   )}
-                  <div className="w-full flex-grow bg-white/50 border border-black/20 rounded flex items-center justify-center mb-1 overflow-hidden p-1 relative">
+                  <div className="w-full h-full rounded flex items-center justify-center overflow-hidden relative">
                     <img src={card.potenciador.imagen ? `/${card.potenciador.imagen}` : '/sobre.png'} alt={card.potenciador.nombre} className="w-full h-full object-contain" />
                   </div>
-                  <span className={`text-xs font-bold text-center w-full break-words border-t border-black/20 pt-1 leading-tight ${card.isUsado ? 'text-white' : 'text-black'}`}>
-                    {card.potenciador.nombre}
-                  </span>
                 </div>
               );
             })}

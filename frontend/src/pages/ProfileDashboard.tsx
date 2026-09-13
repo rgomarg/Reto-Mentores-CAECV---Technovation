@@ -1,108 +1,105 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
+import Navbar from '../components/Navbar';
 
 export default function ProfileDashboard() {
-  const navigate = useNavigate();
-  // Extraemos el id de la URL (Asegúrate de que en App.tsx la ruta sea /dashboard/:idUsuario)
   const { id } = useParams();
-  
-  // Le decimos a TypeScript que puede ser <any> para que no se queje del null inicial
+  const navigate = useNavigate();
   const [datosUsuario, setDatosUsuario] = useState<any>(null);
+  const [totalCromos, setTotalCromos] = useState<number>(0);
 
   useEffect(() => {
-    // Ajusta la URL si finalmente decidisteis usar /api o no
+    // 1. Obtener datos del usuario
     fetch(`/api/usuarios/${id}`)
       .then(respuesta => respuesta.json())
       .then(datosDelBackend => {
         setDatosUsuario(datosDelBackend);
       });
-  }, [id]);
 
+    // 2. Obtener total de cromos en el juego
+    fetch('/api/cromos')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTotalCromos(data.length);
+        }
+      })
+      .catch(err => console.error("Error al cargar total de cromos:", err));
+  }, [id]);
 
   if (datosUsuario == null) {
     return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-        <p className="text-xl font-semibold">Cargando datos... </p>
+      <div className="min-h-screen bg-[#FCF6DF] flex flex-col font-sans">
+        <Navbar />
+        <div className="flex-grow flex justify-center items-center">
+          <p className="text-xl font-semibold text-[#1C201C]">Cargando datos... </p>
+        </div>
       </div>
     );
   }
 
+  const isAlbumCompleto = totalCromos > 0 && datosUsuario.nCromos >= totalCromos;
+
   return (
-    // 1. Fondo principal gris de toda la pantalla de ordenador
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center font-sans text-black py-4">
+    <div className="min-h-screen bg-[#FCF6DF] flex flex-col font-sans text-[#1C201C]">
       
-      {/* 2. Contenedor que simula la pantalla del móvil */}
-      <div className="w-full max-w-[450px] min-h-[800px] bg-gradient-to-b from-[#a8e6a3] to-[#80d07b] flex flex-col shadow-2xl sm:rounded-[40px] overflow-hidden relative">
-          
-        {/* Botón Volver (Flotante) */}
-        <button 
-          className='absolute top-6 left-6 rounded-3xl hover:bg-black/20 px-4 py-2 bg-black/10 text-sm font-medium transition'
-          onClick={() => navigate('/perfiles')}
-        >
-          Volver
-        </button>
+      {/* 1. Menú Global */}
+      <Navbar />
 
-        {/* Cabecera (Avatar + Stats) */}
-        <div className="flex flex-row w-full border-b-[3px] border-black mt-20 pb-8 px-4">
-          
-          {/* Lado Izquierdo: Avatar y Nombre */}
-          <div className="flex flex-col items-center justify-center w-1/2 pr-2">
-            <div className="w-24 h-24 rounded-full border-[4px] border-black flex items-center justify-center mb-3 bg-transparent">
-              <svg className="w-14 h-14 text-black" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5zm0 12c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
-              </svg>
-            </div>
-            <h2 className="text-lg font-semibold text-center leading-tight">
-              Bienvenidx,<br/>{datosUsuario.nombre}
-            </h2>
+      {/* 2. Contenido Principal */}
+      <div className="flex-grow flex flex-col items-center px-4 py-8">
+        
+        {/* Avatar Centralizado */}
+        <div className="flex flex-col items-center justify-center mt-6 mb-12">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 bg-[#DE6D5C] rounded-full flex items-center justify-center text-white font-bold text-5xl mb-4 shadow-sm">
+            {datosUsuario.nombre ? datosUsuario.nombre.charAt(0).toUpperCase() : 'A'}
           </div>
-
-          {/* Lado Derecho: Estadísticas */}
-          <div className="flex flex-col justify-center w-1/2 border-l-[3px] border-black pl-4 text-sm font-medium gap-3">
-            <div className="flex justify-between">
-              <span>Puntos:</span>
-              <span className="font-bold">{datosUsuario.puntuacionUsuario}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Nº Cromos:</span>
-              <span className="font-bold">{datosUsuario.nCromos}</span>
-            </div>
-            <div className="flex justify-between text-xs sm:text-sm">
-              <span>Nº Poten:</span>
-              <span className="font-bold">{datosUsuario.nPotenciadores}</span>
-            </div>
-          </div>
+          <h2 className="text-3xl font-extrabold tracking-tight">
+            {datosUsuario.nombre}
+          </h2>
         </div>
 
-        {/* Tarjetas de Acción (Álbum y Potenciadores) */}
-        <div className="flex flex-row justify-center gap-4 p-6 flex-grow items-start mt-2">
+        {/* Grid de 4 Estadísticas (Max Width para ordenador) */}
+        <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 px-2">
           
-          {/* Tarjeta Album */}
-          <button 
-            // Pasamos los cromos por el estado de React Router para usarlos mañana
-            onClick={() => navigate(`/dashboard/${id}/album`, { state: { cromos: datosUsuario.usuarioCromos} })}
-            className="flex-1 w-full aspect-[1/1.6] border-[3px] border-black bg-transparent hover:bg-black/5 transition duration-300 flex flex-col items-center pt-8"
-          >
-            <span className="text-2xl font-bold mb-10">Album</span>
-            <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 10h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z" />
-              <path d="M6 10V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
-              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            </svg>
-          </button>
+          {/* Card 1: Puntos totales */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-center">
+            <span className="text-3xl font-bold mb-1">{datosUsuario.puntuacionUsuario || 0}</span>
+            <span className="text-base font-bold text-gray-800">Puntos totales</span>
+          </div>
 
-          {/* Tarjeta Potenciadores */}
-          <button 
-            onClick={() => navigate(`/dashboard/${id}/potenciadores`, { state: { potenciadores: datosUsuario.usuarioPotenciadores} })}
-            className="flex-1 w-full aspect-[1/1.6] border-[3px] border-black bg-transparent hover:bg-black/5 transition duration-300 flex flex-col items-center pt-8 px-1"
-          >
-            <span className="text-lg font-bold mb-10 text-center break-words leading-tight">Potenciadores</span>
-            <svg className="w-20 h-20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 17L17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
-          </button>
+          {/* Card 2: Progreso Álbum */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-center">
+            <span className="text-3xl font-bold mb-1">
+               {datosUsuario.nCromos || 0} / {totalCromos || '?'}
+            </span>
+            <span className={`text-base font-bold ${isAlbumCompleto ? 'text-green-600' : 'text-gray-800'}`}>
+              {isAlbumCompleto ? '¡Álbum completo!' : 'Progreso del álbum'}
+            </span>
+          </div>
+
+          {/* Card 3: Boss derrotados (Simulado) */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-center">
+            <span className="text-3xl font-bold mb-1">4</span>
+            <span className="text-base font-bold text-gray-800">Boss derrotados</span>
+          </div>
+
+          {/* Card 4: Racha (Simulado) */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-center">
+            <span className="text-3xl font-bold mb-1">5 días</span>
+            <span className="text-base font-bold text-gray-800">Racha</span>
+          </div>
+
+        </div>
+
+        {/* Link a Datos Personales (Abajo derecha) */}
+        <div className="w-full max-w-2xl flex justify-end items-center mt-12 pr-4 cursor-pointer hover:opacity-70 transition-opacity">
+          <span className="text-lg font-medium mr-2">Datos personales</span>
+          <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" fill="transparent" stroke="black"/>
+            <path d="M12 16l4-4-4-4" />
+            <path d="M8 12h8" />
+          </svg>
         </div>
 
       </div>
