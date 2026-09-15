@@ -11,14 +11,18 @@ export default function CardItem({ cromo, onClick, isConseguida = true }: CardIt
   return (
     <div
       onClick={onClick}
-      className={`group relative cursor-pointer transition-all duration-300 transform hover:-translate-y-1.5 hover:scale-[1.04] ${
-        isConseguida ? 'opacity-100' : 'opacity-85'
+      className={`group relative transition-all duration-300 transform ${
+        isConseguida
+          ? 'cursor-pointer hover:-translate-y-1.5 hover:scale-[1.04] opacity-100'
+          : 'cursor-default opacity-85 hover:scale-[1.01]'
       }`}
     >
-      <CardVisual card={cromo} size="md" />
+      <CardVisual card={cromo} size="md" isConseguida={isConseguida} />
 
-      {/* Efecto de borde al hacer hover */}
-      <div className="absolute inset-0 rounded-2xl ring-2 ring-transparent group-hover:ring-amber-400/80 transition-all pointer-events-none" />
+      {/* Efecto de borde al hacer hover en cartas conseguidas */}
+      {isConseguida && (
+        <div className="absolute inset-0 rounded-2xl ring-2 ring-transparent group-hover:ring-amber-400/80 transition-all pointer-events-none" />
+      )}
     </div>
   );
 }

@@ -7,15 +7,18 @@ interface CardVisualProps {
   size?: 'sm' | 'md' | 'lg';
   showDetails?: boolean;
   modifierBoost?: number;
+  isConseguida?: boolean;
 }
 
 export default function CardVisual({
   card: inputCard,
   size = 'md',
   modifierBoost = 0,
+  isConseguida,
 }: CardVisualProps) {
   const card = inputCard || INITIAL_CARDS[2];
   const [imgFailed, setImgFailed] = useState(false);
+  const owned = isConseguida !== undefined ? isConseguida : (card?.esConseguida ?? true);
 
   // Colores temáticos según el elemento o id
   const getTheme = () => {
@@ -105,15 +108,30 @@ export default function CardVisual({
 
   return (
     <div
-      className={`relative select-none rounded-2xl overflow-hidden shadow-2xl border-4 ${theme.border} bg-white flex flex-col transition-all duration-300 ${
+      className={`relative select-none rounded-2xl overflow-hidden shadow-2xl border-4 ${
+        owned ? theme.border : 'border-gray-400'
+      } bg-white flex flex-col transition-all duration-300 ${
+        !owned ? 'grayscale contrast-90 opacity-75' : ''
+      } ${
         isLarge
           ? 'w-[300px] sm:w-[330px] md:w-[360px] aspect-[2.5/3.6]'
           : 'w-full aspect-[2.5/3.6]'
       }`}
     >
+      {/* Badge 'NO OBTENIDA' si la carta no la tiene el usuario */}
+      {!owned && (
+        <div className="absolute inset-0 bg-black/10 z-10 pointer-events-none flex items-center justify-center">
+          <span className="bg-black/75 backdrop-blur-xs text-white text-[11px] font-black tracking-widest uppercase px-3 py-1 rounded-full shadow-lg border border-white/20">
+            🔒 No obtenida
+          </span>
+        </div>
+      )}
+
       {/* Barra superior de la carta (Nombre, Fase, HP y Elemento) */}
       <div
-        className={`w-full bg-gradient-to-r ${theme.headerBg} px-3 py-1.5 flex items-center justify-between text-white shadow-xs`}
+        className={`w-full bg-gradient-to-r ${
+          owned ? theme.headerBg : 'from-gray-500 via-gray-600 to-gray-700'
+        } px-3 py-1.5 flex items-center justify-between text-white shadow-xs`}
       >
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-black tracking-wider uppercase drop-shadow-xs">

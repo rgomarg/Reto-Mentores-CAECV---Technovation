@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 
 export default function ProfileSelection() {
   const navigate = useNavigate();
+  const { setCurrentUserId } = useUser();
 
   const perfiles = [
     {id: 1, nombre: "Raquel"},
@@ -25,8 +27,11 @@ export default function ProfileSelection() {
         {perfiles.map((perfil) => (
           <button
             key={perfil.nombre}
-            onClick={() => navigate(`/dashboard/${perfil.id}`)}
-            className="bg-[#1b5e20] hover:bg-[#124116] text-white py-4 px-8 text-xl font-semibold rounded-none shadow-[0_4px_14px_0_rgba(27,94,32,0.39)] hover:shadow-[0_6px_20px_rgba(27,94,32,0.23)] hover:-translate-y-1 transition duration-200 ease-in-out w-full"
+            onClick={() => {
+              setCurrentUserId(perfil.id);
+              navigate(`/dashboard/${perfil.id}`);
+            }}
+            className="bg-[#1b5e20] hover:bg-[#124116] text-white py-4 px-8 text-xl font-semibold rounded-none shadow-[0_4px_14px_0_rgba(27,94,32,0.39)] hover:shadow-[0_6px_20px_rgba(27,94,32,0.23)] hover:-translate-y-1 transition duration-200 ease-in-out w-full cursor-pointer"
           >
             {perfil.nombre}
           </button>

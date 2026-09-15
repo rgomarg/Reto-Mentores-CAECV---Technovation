@@ -158,7 +158,16 @@ export default function Navbar({ activeTab }: NavbarProps) {
                 ))}
               </div>
 
-              <div className="border-t border-gray-100 mt-2 pt-2 px-1">
+              <div className="border-t border-gray-100 mt-2 pt-2 px-1 flex flex-col gap-1">
+                <button
+                  onClick={() => {
+                    navigate(`/dashboard/${currentUserId}`);
+                    setDropdownOpen(false);
+                  }}
+                  className="w-full text-center text-xs text-[#DE6B58] hover:bg-[#DE6B58]/10 py-1.5 rounded-xl font-bold transition"
+                >
+                  Ver mi perfil actual →
+                </button>
                 <button
                   onClick={() => {
                     navigate('/perfiles');
@@ -166,7 +175,7 @@ export default function Navbar({ activeTab }: NavbarProps) {
                   }}
                   className="w-full text-center text-xs text-gray-500 hover:text-gray-900 py-1 font-medium"
                 >
-                  Ver todos los perfiles →
+                  Cambiar de perfil (lista) →
                 </button>
               </div>
             </div>

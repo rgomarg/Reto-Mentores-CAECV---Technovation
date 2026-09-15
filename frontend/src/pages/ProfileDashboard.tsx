@@ -10,20 +10,14 @@ export default function ProfileDashboard() {
   const { currentUser, currentUserId } = useUser();
 
   const activeId = id ? parseInt(id, 10) : currentUserId;
-  const [userData, setUserData] = useState<UserProfile | null>(() => {
-    if (!id || parseInt(id, 10) === currentUser?.id) {
-      return currentUser;
-    }
-    return null;
-  });
-  const [loading, setLoading] = useState<boolean>(!userData);
+  const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [totalCromos, setTotalCromos] = useState<number>(20);
 
-  // Cargar datos del usuario desde la API
+  // Cargar datos del usuario desde la API siempre que cambie activeId
   useEffect(() => {
     let isMounted = true;
     if (activeId) {
-      setLoading(true);
       fetch(`/api/usuarios/${activeId}`)
         .then((res) => {
           if (res.ok) return res.json();

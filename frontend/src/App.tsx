@@ -46,6 +46,10 @@ const router = createBrowserRouter([
     element: <ProfileSelection />
   },
   {
+    path: "/perfil",
+    element: <ProfileDashboard />
+  },
+  {
     path: "/dashboard/:id",
     element: <ProfileDashboard />
   },
