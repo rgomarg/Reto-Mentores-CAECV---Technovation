@@ -12,6 +12,7 @@ import Potenciadores from './pages/Potenciadores';
 import NfcScan from './pages/NfcScan';
 import CromoDetalle from './pages/CromoDetalle';
 import NFCPage from './pages/NFCPage';
+import Batallas from './pages/Batallas'; // <- IMPORTAMOS LA NUEVA PANTALLA
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard/:id/potenciadores",
     element: <Potenciadores />
+  },
+  {
+    path: "/dashboard/:id/batallas", // <- NUEVA RUTA
+    element: <Batallas />
   },
   {
     path: "/nfc/:id?",

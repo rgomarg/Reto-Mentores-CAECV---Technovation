@@ -37,7 +37,7 @@ export default function Navbar() {
           Inicio
         </button>
         <button 
-          onClick={() => alert("Próximamente: Batallas")}
+          onClick={() => navigate(`/dashboard/${loggedUserId}/batallas`)}
           className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isActive('/batallas') ? 'bg-[#FCF5DF]' : 'hover:bg-black/10'}`}
         >
           Batallas
