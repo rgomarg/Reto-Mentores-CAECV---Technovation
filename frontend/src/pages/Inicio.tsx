@@ -82,14 +82,7 @@ export default function Inicio() {
                   Clasificación
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-                Liga en curso • Puntuaciones en tiempo real
-              </p>
             </div>
-
-            <span className="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-full border border-emerald-200">
-              En vivo
-            </span>
           </div>
 
           {/* Lista de Clasificación */}
@@ -167,12 +160,6 @@ export default function Inicio() {
           {/* Pie del Panel de Ranking */}
           <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
             <span>Total participantes: {ranking.length}</span>
-            <button
-              onClick={() => navigate('/usuarios')}
-              className="text-emerald-700 font-bold hover:underline"
-            >
-              + Nuevo usuario
-            </button>
           </div>
 
         </div>
