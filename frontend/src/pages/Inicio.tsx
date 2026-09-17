@@ -65,38 +65,6 @@ export default function Inicio() {
       {/* 1. Menú Global de Navegación */}
       <Navbar />
 
-      {/* 2. Banner de bienvenida / Contexto del Reto */}
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-6 pb-2">
-        <div className="bg-[#C1C69A]/30 border border-[#C1C69A] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#1C201C] text-[#FCF6DF] text-xs font-bold uppercase tracking-wider mb-1.5">
-              🌿 Reto CAECV
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1C201C] tracking-tight">
-              Liga Agroecológica de la Comunitat
-            </h1>
-            <p className="text-sm text-gray-700 mt-1 max-w-2xl">
-              Consigue cromos escaneando en tus visitas a los mercados ecológicos locales, aplica potenciadores y escala posiciones en la clasificación.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => navigate(`/usuario/${loggedUserId}`)}
-              className="bg-[#DE6D5C] hover:bg-[#c95949] text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all hover:scale-105"
-            >
-              Mi Perfil
-            </button>
-            <button
-              onClick={() => navigate('/agricultor/a')}
-              className="bg-white hover:bg-black/5 text-[#1C201C] border border-[#C1C69A] text-sm font-bold px-4 py-2.5 rounded-xl transition-all"
-            >
-              Ser Agricultor/a
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* 3. Contenedor Principal en 2 Paneles (Izquierda: Ranking | Derecha: Mapa) */}
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-grow">
         
