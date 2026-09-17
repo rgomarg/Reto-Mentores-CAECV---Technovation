@@ -1,18 +1,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-// Imagina que has creado estos dos componentes en otros archivos:
 import Inicio from './pages/Inicio';
+import Usuario from './pages/Usuario';
 import Agricultor from './pages/Agricultor'; 
 import CrearUsuarios from './pages/CrearUsuarios';
-
-// Nuevas pantallas del mockup
 import ProfileSelection from './pages/ProfileSelection';
-import ProfileDashboard from './pages/ProfileDashboard';
 import Album from './pages/Album';
 import Potenciadores from './pages/Potenciadores';
 import NfcScan from './pages/NfcScan';
 import CromoDetalle from './pages/CromoDetalle';
 import NFCPage from './pages/NFCPage';
-import Batallas from './pages/Batallas'; // <- IMPORTAMOS LA NUEVA PANTALLA
+import Batallas from './pages/Batallas';
 
 const router = createBrowserRouter([
   {
@@ -20,12 +17,32 @@ const router = createBrowserRouter([
     element: <Inicio />
   },
   {
+    path: "/inicio",
+    element: <Inicio />
+  },
+  {
+    path: "/usuario",
+    element: <Usuario />
+  },
+  {
+    path: "/usuario/:id",
+    element: <Usuario />
+  },
+  {
+    path: "/perfil",
+    element: <Usuario />
+  },
+  {
+    path: "/perfil/:id",
+    element: <Usuario />
+  },
+  {
     path: "/agricultor/a",
     element: <Agricultor />
   },
   {
-    path:"/usuarios",
-    element: <CrearUsuarios/>
+    path: "/usuarios",
+    element: <CrearUsuarios />
   },
   {
     path: "/perfiles",
@@ -33,7 +50,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard/:id",
-    element: <ProfileDashboard />
+    element: <Usuario />
   },
   {
     path: "/dashboard/:id/album",
@@ -44,7 +61,7 @@ const router = createBrowserRouter([
     element: <Potenciadores />
   },
   {
-    path: "/dashboard/:id/batallas", // <- NUEVA RUTA
+    path: "/dashboard/:id/batallas",
     element: <Batallas />
   },
   {

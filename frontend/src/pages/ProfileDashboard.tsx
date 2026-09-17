@@ -1,10 +1,9 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 
 export default function ProfileDashboard() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [datosUsuario, setDatosUsuario] = useState<any>(null);
   const [totalCromos, setTotalCromos] = useState<number>(0);
 

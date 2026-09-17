@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
@@ -57,7 +57,7 @@ export default function Album() {
   const unownedCromos = allCromos.filter(c => !ownedCromoIds.has(c.id));
 
   // Lógica de filtrado visual
-  const filteredUserCromos = userCromos.filter(uc => {
+  const filteredUserCromos = userCromos.filter(() => {
     if (filtroActivo === 'Todas' || filtroActivo === 'Conseguidas') return true;
     // Asumiendo que pudieramos filtrar por categoría en un futuro:
     // if (filtroActivo === 'Ecológicas') return uc.cromo.categoria === 'Ecológicas';
