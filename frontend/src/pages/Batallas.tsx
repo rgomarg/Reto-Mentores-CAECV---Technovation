@@ -14,7 +14,7 @@ export default function Batallas() {
       <div className="flex-grow flex items-start sm:items-center justify-center p-4 sm:p-8 mt-12 sm:mt-0">
         
         {/* Banner de la Plaga */}
-        <div className="w-full max-w-4xl flex flex-col md:flex-row bg-[#2B5C65] rounded-xl overflow-hidden shadow-2xl">
+        <div className="w-full max-w-4xl flex flex-col md:flex-row bg-[#48810a] rounded-xl overflow-hidden shadow-2xl">
           
           {/* Imagen (Izquierda) */}
           <div className="w-full md:w-1/2 h-64 md:h-auto overflow-hidden bg-black flex items-center justify-center">
@@ -48,7 +48,7 @@ export default function Batallas() {
             <div className="mt-12 flex justify-start">
               <button 
                 onClick={() => alert("¡Batalla en construcción! Próximamente.")}
-                className="bg-[#C1C69A] hover:bg-[#b0b588] text-[#1C201C] font-semibold text-lg py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                className="bg-[#DE6D5C] hover:bg-[#b0b588] text-[#1C201C] font-semibold text-lg py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               >
                 Comenzar batalla
               </button>
