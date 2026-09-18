@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import { obtenerTodosUsuarios, type UsuarioDTO } from '../services/usuarioService';
+import { type UsuarioDTO } from '../services/usuarioService';
 
 export default function Usuario() {
   const { id } = useParams();
@@ -12,26 +12,9 @@ export default function Usuario() {
 
   const [datosUsuario, setDatosUsuario] = useState<UsuarioDTO | null>(null);
   const [totalCromos, setTotalCromos] = useState<number>(0);
-  const [usuariosDisponibles, setUsuariosDisponibles] = useState<UsuarioDTO[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
 
-  // 1. Cargar lista de todos los usuarios de la BBDD para el dropdown
-  useEffect(() => {
-    let isMounted = true;
-    obtenerTodosUsuarios()
-      .then(users => {
-        if (isMounted) {
-          setUsuariosDisponibles(users);
-        }
-      })
-      .catch(err => console.error("Error al cargar usuarios de la BBDD:", err));
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  // 2. Cargar datos del usuario seleccionado y total del álbum
+  // Cargar datos del usuario seleccionado y total del álbum
   useEffect(() => {
     let isMounted = true;
     setCargando(true);
@@ -68,19 +51,6 @@ export default function Usuario() {
     };
   }, [currentUserId]);
 
-  // Manejador del cambio de usuario activo
-  const handleCambiarUsuario = (nuevoId: string) => {
-    const userObj = usuariosDisponibles.find(u => u.id.toString() === nuevoId);
-    if (userObj) {
-      localStorage.setItem('loggedUserId', nuevoId);
-      localStorage.setItem('loggedUserName', userObj.nombre);
-      // Disparar evento para que el Navbar actualice su avatar al instante
-      window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('user-changed', { detail: { id: nuevoId, nombre: userObj.nombre } }));
-    }
-    navigate(`/usuario/${nuevoId}`);
-  };
-
   if (cargando && !datosUsuario) {
     return (
       <div className="min-h-screen bg-[#FCF6DF] flex flex-col font-sans">
@@ -105,45 +75,6 @@ export default function Usuario() {
       {/* 2. Contenido Principal */}
       <div className="flex-grow flex flex-col items-center px-4 py-8 max-w-4xl mx-auto w-full">
 
-        {/* Barra superior del perfil: Selector dinámico de usuario */}
-        <div className="w-full max-w-2xl bg-white/70 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-sm border border-[#C1C69A]/40 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">👤</span>
-            <div>
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">
-                Usuario activo
-              </span>
-              <span className="text-sm font-bold text-[#1C201C]">
-                {datosUsuario?.nombre || 'Selecciona un usuario'}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <label htmlFor="user-select" className="text-xs font-medium text-gray-600 shrink-0">
-              Cambiar:
-            </label>
-            <select
-              id="user-select"
-              value={currentUserId}
-              onChange={(e) => handleCambiarUsuario(e.target.value)}
-              className="w-full sm:w-auto bg-[#FCF6DF] hover:bg-white text-[#1C201C] font-semibold text-sm py-2 px-3 rounded-xl border border-[#C1C69A] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#DE6D5C] cursor-pointer transition-all"
-            >
-              {usuariosDisponibles.length > 0 ? (
-                usuariosDisponibles.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.nombre} ({u.puntuacionUsuario} pts)
-                  </option>
-                ))
-              ) : (
-                <option value={currentUserId}>
-                  {datosUsuario?.nombre || `Usuario #${currentUserId}`}
-                </option>
-              )}
-            </select>
-          </div>
-        </div>
-
         {/* Avatar Centralizado */}
         <div className="flex flex-col items-center justify-center mt-2 mb-10">
           <div className="relative">
@@ -156,9 +87,6 @@ export default function Usuario() {
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1C201C]">
             {datosUsuario?.nombre}
           </h2>
-          <span className="text-sm text-gray-600 font-medium mt-1">
-            Jugador del Reto CAECV • ID #{currentUserId}
-          </span>
         </div>
 
         {/* Grid de 4 Estadísticas */}
