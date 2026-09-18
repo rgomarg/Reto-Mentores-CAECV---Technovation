@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 
 export default function ProfileDashboard() {
   const { id } = useParams();
+
   const [datosUsuario, setDatosUsuario] = useState<any>(null);
   const [totalCromos, setTotalCromos] = useState<number>(0);
 

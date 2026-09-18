@@ -15,7 +15,8 @@ import com.retoCAECV.backend.repository.CromoRepository;
 import com.retoCAECV.backend.repository.PotenciadorRepository;
 import com.retoCAECV.backend.repository.UsuarioPotenciadorRepository;
 import com.retoCAECV.backend.service.UsuarioCromoService;
-import java.sql.Date;
+
+import java.time.LocalDateTime;
 
 @Service
 public class UsuarioCromoServiceImpl implements UsuarioCromoService{
@@ -51,7 +52,7 @@ public class UsuarioCromoServiceImpl implements UsuarioCromoService{
         uc.setUsuario(usuario);
         uc.setCromo(cromo);
         uc.setUsado(false);
-        uc.setFechaObtenido(new Date(System.currentTimeMillis()));
+        uc.setFechaObtenido(LocalDateTime.now());
         uc.setCantidad(1);
         
         usuarioCromoRepository.save(uc);

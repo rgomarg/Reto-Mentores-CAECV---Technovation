@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+
 import Navbar from '../components/Navbar';
 
 export default function Potenciadores() {
   const { id } = useParams();
+
   const location = useLocation();
   
   const [allPotenciadores, setAllPotenciadores] = useState<any[]>([]);

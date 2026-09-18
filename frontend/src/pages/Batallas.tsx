@@ -1,7 +1,6 @@
 import Navbar from '../components/Navbar';
 
 export default function Batallas() {
-
   return (
     <div className="min-h-screen bg-[#FCF6DF] flex flex-col font-sans text-[#1C201C]">
       {/* Menú Global */}

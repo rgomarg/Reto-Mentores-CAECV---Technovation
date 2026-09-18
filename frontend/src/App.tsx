@@ -10,6 +10,7 @@ import NfcScan from './pages/NfcScan';
 import CromoDetalle from './pages/CromoDetalle';
 import NFCPage from './pages/NFCPage';
 import Batallas from './pages/Batallas';
+import DemoAdmin from './pages/DemoAdmin'; // Panel oculto para el pitch
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/perfiles",
     element: <ProfileSelection />
+  },
+  {
+    path: "/demo", // Ruta oculta
+    element: <DemoAdmin />
   },
   {
     path: "/dashboard/:id",
