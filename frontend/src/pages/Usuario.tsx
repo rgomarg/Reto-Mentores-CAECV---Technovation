@@ -135,29 +135,6 @@ export default function Usuario() {
             <span className="text-base font-bold text-gray-800">Racha activa</span>
             <span className="text-xs text-gray-500 mt-0.5">Días consecutivos apoyando la huerta ecológica</span>
           </div>
-
-        </div>
-
-        {/* Enlace rápido a colecciones del usuario */}
-        <div className="w-full max-w-2xl mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3 px-2">
-          <button
-            onClick={() => navigate(`/dashboard/${currentUserId}/album`)}
-            className="p-3 bg-white hover:bg-[#FCF6DF] border border-[#C1C69A] rounded-xl text-center font-bold text-sm text-[#1C201C] transition-all shadow-sm flex flex-col items-center gap-1"
-          >
-            <span>📖 Ver Álbum</span>
-          </button>
-          <button
-            onClick={() => navigate(`/dashboard/${currentUserId}/potenciadores`)}
-            className="p-3 bg-white hover:bg-[#FCF6DF] border border-[#C1C69A] rounded-xl text-center font-bold text-sm text-[#1C201C] transition-all shadow-sm flex flex-col items-center gap-1"
-          >
-            <span>⚡ Potenciadores ({datosUsuario?.nPotenciadores || 0})</span>
-          </button>
-          <button
-            onClick={() => navigate(`/dashboard/${currentUserId}/batallas`)}
-            className="col-span-2 sm:col-span-1 p-3 bg-white hover:bg-[#FCF6DF] border border-[#C1C69A] rounded-xl text-center font-bold text-sm text-[#1C201C] transition-all shadow-sm flex flex-col items-center gap-1"
-          >
-            <span>⚔️ Batallas</span>
-          </button>
         </div>
 
         {/* Link a Datos Personales */}
