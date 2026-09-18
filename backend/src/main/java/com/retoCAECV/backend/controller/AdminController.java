@@ -48,40 +48,44 @@ public class AdminController {
 
     @PostMapping("/poblar-datos")
     public ResponseEntity<String> poblarDatosDemo() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        List<Cromo> cromos = cromoRepository.findAll();
+        try {
+            List<Usuario> usuarios = usuarioRepository.findAll();
+            List<Cromo> cromos = cromoRepository.findAll();
 
-        if (usuarios.isEmpty() || cromos.isEmpty()) {
-            return ResponseEntity.badRequest().body("Necesitas tener usuarios y cromos creados primero.");
-        }
-
-        Random rand = new Random();
-        int registrosCreados = 0;
-
-        // Vamos a simular 60 escaneos repartidos en los últimos 14 días
-        for (int i = 0; i < 60; i++) {
-            Usuario usuarioRandom = usuarios.get(rand.nextInt(usuarios.size()));
-            Cromo cromoRandom = cromos.get(rand.nextInt(cromos.size()));
-
-            // Comprobar que no lo tenga ya
-            if (usuarioCromoRepository.findByUsuarioAndCromo(usuarioRandom, cromoRandom).isEmpty()) {
-                
-                // Generar una fecha aleatoria en los últimos 14 días
-                int diasAtras = rand.nextInt(14);
-                LocalDateTime fechaAleatoria = LocalDateTime.now().minusDays(diasAtras).minusHours(rand.nextInt(12));
-
-                UsuarioCromo uc = new UsuarioCromo();
-                uc.setUsuario(usuarioRandom);
-                uc.setCromo(cromoRandom);
-                uc.setUsado(false);
-                uc.setCantidad(1);
-                uc.setFechaObtenido(fechaAleatoria);
-
-                usuarioCromoRepository.save(uc);
-                registrosCreados++;
+            if (usuarios.isEmpty() || cromos.isEmpty()) {
+                return ResponseEntity.badRequest().body("Necesitas tener usuarios y cromos creados primero.");
             }
-        }
 
-        return ResponseEntity.ok("Éxito. Se han generado " + registrosCreados + " escaneos falsos distribuidos en los últimos 14 días para la demo.");
+            Random rand = new Random();
+            int registrosCreados = 0;
+
+            // Vamos a simular 60 escaneos repartidos en los últimos 14 días
+            for (int i = 0; i < 60; i++) {
+                Usuario usuarioRandom = usuarios.get(rand.nextInt(usuarios.size()));
+                Cromo cromoRandom = cromos.get(rand.nextInt(cromos.size()));
+
+                // Comprobar que no lo tenga ya
+                if (usuarioCromoRepository.findByUsuarioAndCromo(usuarioRandom, cromoRandom).isEmpty()) {
+                    
+                    // Generar una fecha aleatoria en los últimos 14 días
+                    int diasAtras = rand.nextInt(14);
+                    LocalDateTime fechaAleatoria = LocalDateTime.now().minusDays(diasAtras).minusHours(rand.nextInt(12));
+
+                    UsuarioCromo uc = new UsuarioCromo();
+                    uc.setUsuario(usuarioRandom);
+                    uc.setCromo(cromoRandom);
+                    uc.setUsado(false);
+                    uc.setCantidad(1);
+                    uc.setFechaObtenido(fechaAleatoria);
+
+                    usuarioCromoRepository.save(uc);
+                    registrosCreados++;
+                }
+            }
+
+            return ResponseEntity.ok("Éxito. Se han generado " + registrosCreados + " escaneos falsos.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error en el servidor: " + e.getMessage());
+        }
     }
 }
