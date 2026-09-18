@@ -1,4 +1,4 @@
-export async function crearUsuario(nombre:String) {
+export async function crearUsuario(nombre:string) {
     const response = await fetch(
         "http://localhost:8080/usuarios",
         {

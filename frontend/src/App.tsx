@@ -12,7 +12,8 @@ import Potenciadores from './pages/Potenciadores';
 import NfcScan from './pages/NfcScan';
 import CromoDetalle from './pages/CromoDetalle';
 import NFCPage from './pages/NFCPage';
-import Batallas from './pages/Batallas'; // <- IMPORTAMOS LA NUEVA PANTALLA
+import Batallas from './pages/Batallas';
+import DemoAdmin from './pages/DemoAdmin'; // Panel oculto para el pitch
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
     element: <ProfileSelection />
   },
   {
+    path: "/demo", // Ruta oculta
+    element: <DemoAdmin />
+  },
+  {
     path: "/dashboard/:id",
     element: <ProfileDashboard />
   },
@@ -44,7 +49,7 @@ const router = createBrowserRouter([
     element: <Potenciadores />
   },
   {
-    path: "/dashboard/:id/batallas", // <- NUEVA RUTA
+    path: "/dashboard/:id/batallas",
     element: <Batallas />
   },
   {

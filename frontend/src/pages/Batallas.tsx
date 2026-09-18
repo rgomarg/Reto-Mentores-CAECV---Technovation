@@ -1,9 +1,8 @@
-import React from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 
 export default function Batallas() {
-  const navigate = useNavigate();
+  
 
   return (
     <div className="min-h-screen bg-[#FCF6DF] flex flex-col font-sans text-[#1C201C]">

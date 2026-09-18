@@ -144,8 +144,8 @@ public class DatabaseSeeder implements CommandLineRunner {
     // =======================================
 
     private void asignarCromos() {
-        // Obtenemos la fecha actual para sql
-        java.sql.Date fechaActual = new java.sql.Date(System.currentTimeMillis());
+        // Obtenemos la fecha actual
+        java.time.LocalDateTime fechaActual = java.time.LocalDateTime.now();
 
         usuarioCromoRepository.save(UsuarioCromo.builder()
                 .usuario(raquel)

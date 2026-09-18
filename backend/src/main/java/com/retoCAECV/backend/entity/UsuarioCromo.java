@@ -1,6 +1,6 @@
 package com.retoCAECV.backend.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,7 +27,7 @@ public class UsuarioCromo {
     private boolean usado;
     
     @Column (nullable = false)
-    private Date fechaObtenido;
+    private LocalDateTime fechaObtenido;
 
     @Column
     private int cantidad; //cuántos repetidos tiene
