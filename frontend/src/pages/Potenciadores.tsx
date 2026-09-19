@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
+import '../../public/mas4Potenciador.png'
+import '../../public/mas8Potenciador.png'
+import '../../public/x2Potenciador.png'
+import '../../public/x3Potenciador.png'
 
 export default function Potenciadores() {
   const { id } = useParams();
@@ -40,15 +44,36 @@ export default function Potenciadores() {
   allPotenciadores.forEach(potenciador => {
      const up = userPotenciadores.find((u: any) => u.potenciador.id === potenciador.id);
      if (up && up.cantidad > 0) {
-        for (let i = 0; i < up.cantidadUsada; i++) {
-           cardsToRender.push({ potenciador, isOwned: true, isUsado: true, uniqueKey: `${potenciador.id}-used-${i}` });
-        }
+        // Los disponibles (tienes cantidad pero no los has usado)
         for (let i = 0; i < (up.cantidad - (up.cantidadUsada || 0)); i++) {
            cardsToRender.push({ potenciador, isOwned: true, isUsado: false, uniqueKey: `${potenciador.id}-avail-${i}` });
         }
+        // Los que ya has gastado
+        for (let i = 0; i < up.cantidadUsada; i++) {
+           cardsToRender.push({ potenciador, isOwned: true, isUsado: true, uniqueKey: `${potenciador.id}-used-${i}` });
+        }
      } else {
+        // Los que no tienes en el inventario
         cardsToRender.push({ potenciador, isOwned: false, isUsado: false, uniqueKey: `${potenciador.id}-unowned` });
      }
+  });
+
+  // ORDENAR: 1º Disponibles, 2º Usados, 3º No conseguidos (en gris)
+  cardsToRender.sort((a, b) => {
+    const getScore = (card: any) => {
+      if (card.isOwned && !card.isUsado) return 1; // Prioridad máxima (Disponibles)
+      if (card.isOwned && card.isUsado) return 2;  // Prioridad media (Usados)
+      return 3;                                    // Prioridad baja (No conseguidos)
+    };
+
+    const scoreA = getScore(a);
+    const scoreB = getScore(b);
+
+    if (scoreA !== scoreB) {
+      return scoreA - scoreB;
+    }
+    // Si tienen la misma prioridad, ordenamos por ID para que no bailen
+    return a.potenciador.id - b.potenciador.id;
   });
 
   return (

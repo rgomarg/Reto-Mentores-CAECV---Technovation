@@ -59,28 +59,48 @@ public class AdminController {
             Random rand = new Random();
             int registrosCreados = 0;
 
-            // Vamos a simular 60 escaneos repartidos en los últimos 14 días
+            // Limpiar tabla (opcional) o simplemente generar nuevos.
+            // Para asegurar números perfectos (ej: +50% de crecimiento)
+            // Vamos a generar 60 escaneos la semana pasada y 90 esta semana.
+            
+            // 1. Generar 60 escaneos para la semana pasada (días 7 al 13)
             for (int i = 0; i < 60; i++) {
-                Usuario usuarioRandom = usuarios.get(rand.nextInt(usuarios.size()));
+                Usuario fakeUser = new Usuario();
+                fakeUser.setNombre("Familia Anónima " + rand.nextInt(9999));
+                usuarioRepository.save(fakeUser);
+
                 Cromo cromoRandom = cromos.get(rand.nextInt(cromos.size()));
+                int diasAtras = 7 + rand.nextInt(7); // Entre 7 y 13 días atrás
+                LocalDateTime fechaAleatoria = LocalDateTime.now().minusDays(diasAtras).minusHours(rand.nextInt(23));
 
-                // Comprobar que no lo tenga ya
-                if (usuarioCromoRepository.findByUsuarioAndCromo(usuarioRandom, cromoRandom).isEmpty()) {
-                    
-                    // Generar una fecha aleatoria en los últimos 14 días
-                    int diasAtras = rand.nextInt(14);
-                    LocalDateTime fechaAleatoria = LocalDateTime.now().minusDays(diasAtras).minusHours(rand.nextInt(12));
+                UsuarioCromo uc = new UsuarioCromo();
+                uc.setUsuario(fakeUser);
+                uc.setCromo(cromoRandom);
+                uc.setUsado(false);
+                uc.setCantidad(1);
+                uc.setFechaObtenido(fechaAleatoria);
+                usuarioCromoRepository.save(uc);
+                registrosCreados++;
+            }
 
-                    UsuarioCromo uc = new UsuarioCromo();
-                    uc.setUsuario(usuarioRandom);
-                    uc.setCromo(cromoRandom);
-                    uc.setUsado(false);
-                    uc.setCantidad(1);
-                    uc.setFechaObtenido(fechaAleatoria);
+            // 2. Generar 90 escaneos para esta semana (días 0 al 6)
+            for (int i = 0; i < 90; i++) {
+                Usuario fakeUser = new Usuario();
+                fakeUser.setNombre("Familia Anónima " + rand.nextInt(9999));
+                usuarioRepository.save(fakeUser);
 
-                    usuarioCromoRepository.save(uc);
-                    registrosCreados++;
-                }
+                Cromo cromoRandom = cromos.get(rand.nextInt(cromos.size()));
+                int diasAtras = rand.nextInt(7); // Entre 0 y 6 días atrás
+                LocalDateTime fechaAleatoria = LocalDateTime.now().minusDays(diasAtras).minusHours(rand.nextInt(23));
+
+                UsuarioCromo uc = new UsuarioCromo();
+                uc.setUsuario(fakeUser);
+                uc.setCromo(cromoRandom);
+                uc.setUsado(false);
+                uc.setCantidad(1);
+                uc.setFechaObtenido(fechaAleatoria);
+                usuarioCromoRepository.save(uc);
+                registrosCreados++;
             }
 
             return ResponseEntity.ok("Éxito. Se han generado " + registrosCreados + " escaneos falsos.");

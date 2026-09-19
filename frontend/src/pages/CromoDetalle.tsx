@@ -110,7 +110,7 @@ export default function CromoDetalle() {
                 <path d="M16 12H8" />
               </svg>
             </button>
-            <h2 className="text-2xl sm:text-3xl font-medium tracking-tight">Pokemon ecológico</h2>
+            <h2 className="text-2xl sm:text-3xl font-medium tracking-tight">Volver a Álbum</h2>
           </div>
 
           {/* Cromo Flotante 3D */}
@@ -136,7 +136,18 @@ export default function CromoDetalle() {
                   {cromo.nombre}
                 </h2>
                 <div className="text-center font-bold text-xl mb-4">
-                   Puntos: {cromo.puntuacion}
+                   {(() => {
+                     let puntos = cromo.puntuacion;
+                     if (hasPotenciador && usuarioCromo.potenciadorAplicado) {
+                       const tipo = usuarioCromo.potenciadorAplicado.tipo;
+                       if (tipo === 'DUPLICAR') puntos *= 2;
+                       else if (tipo === 'TRIPLICAR') puntos *= 3;
+                       else if (tipo === 'MAS_CUATRO') puntos += 4;
+                       else if (tipo === 'MAS_OCHO') puntos += 8;
+                       return <span className="text-blue-700">Puntos: {puntos} (¡Mejorado!)</span>;
+                     }
+                     return <span>Puntos: {puntos}</span>;
+                   })()}
                 </div>
                 <div className="text-center font-medium leading-tight">
                   <p>Información extra o datos curiosos sobre esta carta.</p>

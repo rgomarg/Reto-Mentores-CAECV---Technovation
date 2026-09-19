@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 
+
+
 @Component
 @RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
@@ -128,14 +130,25 @@ public class DatabaseSeeder implements CommandLineRunner {
     private void crearPotenciadores() {
         doblePuntos = potenciadorRepository.save(Potenciador.builder()
                 .nombre("Doble Puntos")
-                .imagen("potenciador.png")
+                .imagen("x2Potenciador.png")
                 .tipo(TipoPotenciadores.DUPLICAR)
                 .build());
 
         triplePuntos = potenciadorRepository.save(Potenciador.builder()
                 .nombre("Triple Puntos")
-                .imagen("potenciador.png")
+                .imagen("x3Potenciador.png")
                 .tipo(TipoPotenciadores.TRIPLICAR)
+                .build());
+        doblePuntos = potenciadorRepository.save(Potenciador.builder()
+                .nombre("Más Cuatro")
+                .imagen("mas4Potenciador.png")
+                .tipo(TipoPotenciadores.MAS_CUATRO)
+                .build());
+
+        triplePuntos = potenciadorRepository.save(Potenciador.builder()
+                .nombre("Más Ocho")
+                .imagen("mas8Potenciador.png")
+                .tipo(TipoPotenciadores.MAS_OCHO)
                 .build());
     }
 
