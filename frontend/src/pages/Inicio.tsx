@@ -75,7 +75,7 @@ export default function Inicio() {
             <div className="flex items-center justify-between pb-4 border-b border-gray-100 mb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl">🏆</span>
+                  
                   <h2 className="text-xl sm:text-2xl font-extrabold text-[#1C201C] tracking-tight">
                     Clasificación
                   </h2>

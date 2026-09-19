@@ -30,24 +30,6 @@ export default function Navbar() {
     };
   }, []);
 
-  const [menuAbierto, setMenuAbierto] = useState(false);
-
-  // Cerrar menú al hacer clic fuera
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('#user-menu-container')) {
-        setMenuAbierto(false);
-      }
-    };
-    if (menuAbierto) {
-      document.addEventListener('click', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [menuAbierto]);
-
   const avatarLetter = (loggedUserName || 'A').charAt(0).toUpperCase();
 
   // Helper para saber qué pestaña está activa
@@ -100,58 +82,17 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Avatar circular con menú emergente (Popover) */}
-      <div id="user-menu-container" className="flex-shrink-0 relative">
-        <div 
-          className={`w-10 h-10 sm:w-12 sm:h-12 bg-[#DE6D5C] rounded-full flex items-center justify-center text-white font-bold text-xl cursor-pointer shadow-sm hover:scale-105 transition-all select-none ${
-            isUsuarioActive ? 'ring-4 ring-white shadow-md' : 'hover:ring-2 hover:ring-black/20'
-          }`}
-          onClick={() => setMenuAbierto(!menuAbierto)}
-          title={`Menú de usuario (${loggedUserName})`}
-        >
-          {avatarLetter}
-        </div>
-
-        {/* Popover Blanco */}
-        {menuAbierto && (
-          <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in duration-150 text-[#1C201C]">
-            <div className="px-4 py-2 border-b border-gray-100">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 block">
-                Sesión iniciada como
-              </span>
-              <span className="font-extrabold text-sm text-[#1C201C] truncate block">
-                {loggedUserName}
-              </span>
-            </div>
-
-            <div className="p-1.5 flex flex-col gap-1">
-              <button
-                onClick={() => {
-                  setMenuAbierto(false);
-                  navigate('/perfiles');
-                }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-[#FCF6DF] transition-colors text-left"
-              >
-                <span className="text-base">🔄</span>
-                <span>Cambiar usuario</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setMenuAbierto(false);
-                  navigate(`/usuario/${loggedUserId}`);
-                }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-[#FCF6DF] transition-colors text-left"
-              >
-                <span className="text-base">👤</span>
-                <span>Ver perfil</span>
-              </button>
-            </div>
-          </div>
-        )}
+      {/* Avatar circular */}
+      <div 
+        className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-[#DE6D5C] rounded-full flex items-center justify-center text-white font-bold text-xl cursor-pointer shadow-sm hover:scale-105 transition-all ${
+          isUsuarioActive ? 'ring-4 ring-white shadow-md' : 'hover:ring-2 hover:ring-black/20'
+        }`}
+        onClick={() => navigate(`/usuario/${loggedUserId}`)}
+        title={`Ver perfil de ${loggedUserName}`}
+      >
+        {avatarLetter}
       </div>
       
     </nav>
   );
 }
-
