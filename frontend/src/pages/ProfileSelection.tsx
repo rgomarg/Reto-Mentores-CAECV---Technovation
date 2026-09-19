@@ -38,10 +38,7 @@ export default function ProfileSelection() {
 
   return (
     <div className="min-h-screen bg-[#FCF6DF] flex flex-col items-center py-20 px-4 font-sans text-[#1C201C]">
-      <button className='rounded-xl hover:bg-black/10 self-start w-fit px-6 py-2 bg-black/5 font-semibold text-lg transition-colors'
-                onClick={() => navigate('/')}>
-          Volver
-      </button>
+      
       
       <div className="flex-grow flex flex-col items-center w-full justify-center mt-8">
         {/* Un círculo que imita la flor del Navbar */}

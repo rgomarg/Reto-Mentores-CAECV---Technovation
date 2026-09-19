@@ -14,7 +14,7 @@ export default function Album() {
 
   // Filtros
   const [filtroActivo, setFiltroActivo] = useState('Todas');
-  const filtros = ['Conseguidas', 'Convencionales', 'Ecológicas', 'Shiny', 'Todas'];
+  const filtros = ['Conseguidas', 'Convencionales', 'Shiny', 'Todas'];
 
   useEffect(() => {
     fetch('/api/cromos')

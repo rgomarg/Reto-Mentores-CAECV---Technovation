@@ -9,6 +9,7 @@ import com.retoCAECV.backend.entity.Usuario;
 import com.retoCAECV.backend.entity.Cromo;
 import com.retoCAECV.backend.entity.Potenciador;
 import com.retoCAECV.backend.entity.UsuarioPotenciador;
+import com.retoCAECV.backend.enums.TipoPotenciadores;
 import com.retoCAECV.backend.repository.UsuarioCromoRepository;
 import com.retoCAECV.backend.repository.UsuarioRepository;
 import com.retoCAECV.backend.repository.CromoRepository;
@@ -83,8 +84,14 @@ public class UsuarioCromoServiceImpl implements UsuarioCromoService{
             throw new RuntimeException("No quedan usos para este potenciador");
         }
 
+        // Aquí hemos borrado la lógica de multiplicar la cantidad.
+        // El potenciador ahora SOLO queda registrado en el cromo, y el cálculo de puntos 
+        // reales se hará dinámicamente en el UsuarioServiceImpl.
+        
+
         up.setCantidadUsada(up.getCantidadUsada() + 1);
         uc.setPotenciadorAplicado(p);
+        
 
         usuarioPotenciadorRepository.save(up);
         usuarioCromoRepository.save(uc);

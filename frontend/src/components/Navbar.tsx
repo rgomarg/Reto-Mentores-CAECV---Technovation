@@ -60,7 +60,7 @@ export default function Navbar() {
       
       {/* Logo (Flor) -> Navega a Inicio */}
       <div 
-        className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+        className="flex-shrink-0 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
         onClick={() => navigate('/')}
         title="Inicio - Reto CAECV"
       >
@@ -71,35 +71,37 @@ export default function Navbar() {
       </div>
 
       {/* Navegación Desktop / Mobile compacta */}
-      <div className="flex flex-row items-center gap-1.5 sm:gap-4 md:gap-6 font-medium text-xs sm:text-base md:text-lg">
-        <button 
-          onClick={() => navigate('/')}
-          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isHomeActive ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
-        >
-          Inicio
-        </button>
-        <button 
-          onClick={() => navigate(`/dashboard/${loggedUserId}/batallas`)}
-          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isActive('/batallas') ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
-        >
-          Batallas
-        </button>
-        <button 
-          onClick={() => navigate(`/dashboard/${loggedUserId}/album`)}
-          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isActive('/album') ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
-        >
-          Album
-        </button>
-        <button 
-          onClick={() => navigate(`/dashboard/${loggedUserId}/potenciadores`)}
-          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isActive('/potenciadores') ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
-        >
-          Potenciadores
-        </button>
+      <div className="flex-1 overflow-x-auto hide-scrollbar mx-2 sm:mx-6 flex items-center justify-start sm:justify-center">
+        <div className="flex flex-row items-center gap-1 sm:gap-4 md:gap-6 font-semibold text-xs sm:text-base md:text-lg min-w-max">
+          <button 
+            onClick={() => navigate('/')}
+            className={`px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isHomeActive ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
+          >
+            Inicio
+          </button>
+          <button 
+            onClick={() => navigate(`/dashboard/${loggedUserId}/batallas`)}
+            className={`px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isActive('/batallas') ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
+          >
+            Batallas
+          </button>
+          <button 
+            onClick={() => navigate(`/dashboard/${loggedUserId}/album`)}
+            className={`px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isActive('/album') ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
+          >
+            Album
+          </button>
+          <button 
+            onClick={() => navigate(`/dashboard/${loggedUserId}/potenciadores`)}
+            className={`px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all ${isActive('/potenciadores') ? 'bg-[#FCF5DF] font-bold shadow-sm' : 'hover:bg-black/10'}`}
+          >
+            Potenciadores
+          </button>
+        </div>
       </div>
 
       {/* Avatar circular con menú emergente (Popover) */}
-      <div id="user-menu-container" className="relative">
+      <div id="user-menu-container" className="flex-shrink-0 relative">
         <div 
           className={`w-10 h-10 sm:w-12 sm:h-12 bg-[#DE6D5C] rounded-full flex items-center justify-center text-white font-bold text-xl cursor-pointer shadow-sm hover:scale-105 transition-all select-none ${
             isUsuarioActive ? 'ring-4 ring-white shadow-md' : 'hover:ring-2 hover:ring-black/20'

@@ -46,6 +46,7 @@ const router = createBrowserRouter([
     element: <CrearUsuarios />
   },
   {
+    //mantengo esta ruta porq se usa a lo largo de toda la app y cambiarlo sería una pereza
     path: "/perfiles",
     element: <ProfileSelection />
   },
