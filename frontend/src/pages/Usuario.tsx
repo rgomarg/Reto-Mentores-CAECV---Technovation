@@ -95,8 +95,8 @@ export default function Usuario() {
           {/* Card 1: Puntos totales */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#C1C69A]/30 flex flex-col justify-center transition-transform hover:scale-[1.01]">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-3xl font-extrabold text-[#1C201C]">{datosUsuario?.puntuacionUsuario || 0}</span>
-              <span className="text-2xl">⭐</span>
+              <span className="text-3xl font-extrabold text-[#1C201C]">{datosUsuario?.puntuacionUsuario || 0}</span>                      
+              
             </div>
             <span className="text-base font-bold text-gray-800">Puntos totales</span>
             <span className="text-xs text-gray-500 mt-0.5">Calculados a partir de tus cromos y potenciadores</span>
@@ -120,7 +120,6 @@ export default function Usuario() {
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#C1C69A]/30 flex flex-col justify-center transition-transform hover:scale-[1.01]">
             <div className="flex items-center justify-between mb-1">
               <span className="text-3xl font-extrabold text-[#1C201C]">4</span>
-              <span className="text-2xl">🪲</span>
             </div>
             <span className="text-base font-bold text-gray-800">Boss derrotados</span>
             <span className="text-xs text-gray-500 mt-0.5">Plagas y retos superados</span>
@@ -129,23 +128,14 @@ export default function Usuario() {
           {/* Card 4: Racha */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#C1C69A]/30 flex flex-col justify-center transition-transform hover:scale-[1.01]">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-3xl font-extrabold text-[#1C201C]">5 días</span>
-              <span className="text-2xl">🔥</span>
+              <span className="text-3xl font-extrabold text-[#1C201C]">5 días</span>            
             </div>
             <span className="text-base font-bold text-gray-800">Racha activa</span>
             <span className="text-xs text-gray-500 mt-0.5">Días consecutivos apoyando la huerta ecológica</span>
           </div>
         </div>
 
-        {/* Link a Datos Personales */}
-        <div className="w-full max-w-2xl flex justify-end items-center mt-10 pr-4 cursor-pointer hover:opacity-70 transition-opacity">
-          <span className="text-base sm:text-lg font-medium mr-2">Datos personales</span>
-          <svg className="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" fill="transparent" stroke="black"/>
-            <path d="M12 16l4-4-4-4" />
-            <path d="M8 12h8" />
-          </svg>
-        </div>
+        
 
       </div>
     </div>
