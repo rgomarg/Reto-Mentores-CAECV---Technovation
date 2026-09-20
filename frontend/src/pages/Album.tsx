@@ -53,18 +53,27 @@ export default function Album() {
     ? userCromos.map(u => u.cromo.id).lastIndexOf(destacadoId) 
     : -1;
 
-  const ownedCromoIds = new Set(userCromos.map(uc => uc.cromo.id));
-  const unownedCromos = allCromos.filter(c => !ownedCromoIds.has(c.id));
+  const ownedMap = new Map(userCromos.map(uc => [uc.cromo.id, uc]));
 
-  // Lógica de filtrado visual
-  const filteredUserCromos = userCromos.filter(() => {
-    if (filtroActivo === 'Todas' || filtroActivo === 'Conseguidas') return true;
-    // Asumiendo que pudieramos filtrar por categoría en un futuro:
-    // if (filtroActivo === 'Ecológicas') return uc.cromo.categoria === 'Ecológicas';
-    return true; // Por ahora mostramos todas las conseguidas si eligen otra cosa
-  });
-
-  const showUnowned = filtroActivo === 'Todas';
+  const displayItems = allCromos
+    .filter(cromo => {
+      if (filtroActivo === 'Shiny') return cromo.nombre.includes('CAECV');
+      if (filtroActivo === 'Convencionales') return !cromo.nombre.includes('CAECV');
+      if (filtroActivo === 'Conseguidas') return ownedMap.has(cromo.id);
+      return true; // Todas
+    })
+    .sort((a, b) => {
+      const aOwned = ownedMap.has(a.id);
+      const bOwned = ownedMap.has(b.id);
+      if (aOwned && !bOwned) return -1;
+      if (!aOwned && bOwned) return 1;
+      return a.nombre.localeCompare(b.nombre);
+    })
+    .map(cromo => ({
+      cromo,
+      isOwned: ownedMap.has(cromo.id),
+      uc: ownedMap.get(cromo.id)
+    }));
 
   return (
     <div className="min-h-screen bg-[#FCF6DF] flex flex-col font-sans text-[#1C201C] relative pb-20">
@@ -94,50 +103,63 @@ export default function Album() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 w-full max-w-6xl items-start">
             
-            {/* Cromos del usuario */}
-            {filteredUserCromos.map((uc: any, index: number) => {
-              const cromo = uc.cromo;
-              const isDestacado = index === lastIndexDestacado;
-              const hasPotenciador = uc.potenciadorAplicado != null;
-              
-              return (
-                <div 
-                  key={uc.id}
-                  onClick={() => navigate(`/cromo/${cromo.id}`, { state: { usuarioCromo: uc, usuarioId: id } })}
-                  className={`aspect-[3/4] border-[2px] flex flex-col items-center justify-center p-2 shadow-sm transition duration-200 cursor-pointer relative rounded-md
-                    ${isDestacado 
-                      ? 'border-yellow-400 bg-yellow-100 scale-105 shadow-yellow-400/50 shadow-lg animate-pulse z-10' 
-                      : hasPotenciador
-                        ? 'border-blue-500 bg-blue-50 shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-105'
-                        : 'border-transparent bg-white hover:scale-105 hover:shadow-md'
-                    }`}
-                >
-                  {hasPotenciador && (
-                     <div className="absolute -top-2 -right-2 text-blue-600 bg-white rounded-full p-1 shadow-md border border-blue-200">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="currentColor">
-                           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                        </svg>
-                     </div>
-                  )}
-                  <div className="w-full h-full rounded flex items-center justify-center overflow-hidden relative">
-                    <img src={`/${cromo.imagen}`} alt={cromo.nombre} className="w-full h-full object-contain" />
+            {/* Cromos unificados y ordenados */}
+            {displayItems.map((item) => {
+              const { cromo, isOwned, uc } = item;
+              const isShiny = cromo.nombre.includes('CAECV');
+
+              if (isOwned) {
+                const isDestacado = cromo.id === destacadoId;
+                const hasPotenciador = uc.potenciadorAplicado != null;
+                
+                return (
+                  <div 
+                    key={uc.id}
+                    onClick={() => navigate(`/cromo/${cromo.id}`, { state: { usuarioCromo: uc, usuarioId: id } })}
+                    className={`aspect-[3/4] border-[2px] flex flex-col items-center justify-center p-2 shadow-sm transition duration-200 cursor-pointer relative rounded-md
+                      ${isDestacado 
+                        ? 'border-yellow-400 bg-yellow-100 scale-105 shadow-yellow-400/50 shadow-lg animate-pulse z-10' 
+                        : hasPotenciador
+                          ? 'border-blue-500 bg-blue-50 shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-105'
+                          : 'border-transparent bg-white hover:scale-105 hover:shadow-md'
+                      }`}
+                  >
+                    {isShiny && (
+                       <div className="absolute top-1 left-1 bg-yellow-400 text-yellow-900 text-[10px] font-black px-1.5 py-0.5 rounded-sm shadow-sm z-10">
+                          ✨ SHINY
+                       </div>
+                    )}
+                    {hasPotenciador && (
+                       <div className="absolute -top-2 -right-2 text-blue-600 bg-white rounded-full p-1 shadow-md border border-blue-200 z-10">
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="currentColor">
+                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                          </svg>
+                       </div>
+                    )}
+                    <div className="w-full h-full rounded flex items-center justify-center overflow-hidden relative">
+                      <img src={`/${cromo.imagen}`} alt={cromo.nombre} className="w-full h-full object-contain" />
+                    </div>
                   </div>
-                </div>
-              );
+                );
+              } else {
+                return (
+                  <div 
+                    key={`unowned-${cromo.id}`}
+                    onClick={() => navigate(`/cromo/${cromo.id}`)}
+                    className="aspect-[3/4] border-[2px] border-transparent bg-white flex flex-col items-center justify-center p-2 shadow-sm cursor-pointer hover:bg-gray-50 transition rounded-md relative"
+                  >
+                    {isShiny && (
+                       <div className="absolute top-1 left-1 bg-yellow-400 text-yellow-900 text-[10px] font-black px-1.5 py-0.5 rounded-sm shadow-sm z-10">
+                          ✨ SHINY
+                       </div>
+                    )}
+                    <div className="w-full h-full rounded flex items-center justify-center overflow-hidden relative grayscale opacity-50">
+                      <img src={`/${cromo.imagen}`} alt={cromo.nombre} className="w-full h-full object-contain" />
+                    </div>
+                  </div>
+                );
+              }
             })}
-            
-            {/* Cromos faltantes (Solo se muestran si el filtro es "Todas") */}
-            {showUnowned && unownedCromos.map(cromo => (
-               <div 
-                 key={`unowned-${cromo.id}`}
-                 onClick={() => navigate(`/cromo/${cromo.id}`)}
-                 className="aspect-[3/4] border-[2px] border-transparent bg-white grayscale opacity-60 flex flex-col items-center justify-center p-2 shadow-sm cursor-pointer hover:opacity-80 transition rounded-md"
-               >
-                 <div className="w-full h-full rounded flex items-center justify-center overflow-hidden relative">
-                   <img src={`/${cromo.imagen}`} alt={cromo.nombre} className="w-full h-full object-contain" />
-                 </div>
-               </div>
-            ))}
           </div>
         )}
       </div>

@@ -14,5 +14,6 @@ public class CromoResponseDTO {
     private String nombre;
     private String imagen;
     private int puntuacion;
+    private String descripcion;
     private List<String> atributos;
 }

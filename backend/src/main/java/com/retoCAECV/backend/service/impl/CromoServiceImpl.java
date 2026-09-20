@@ -24,6 +24,7 @@ public class CromoServiceImpl implements CromoService {
         response.setImagen(cromo.getImagen());
         response.setNombre(cromo.getNombre());
         response.setPuntuacion(cromo.getPuntuacion());
+        response.setDescripcion(cromo.getDescripcion());
 
         return response;
     }
