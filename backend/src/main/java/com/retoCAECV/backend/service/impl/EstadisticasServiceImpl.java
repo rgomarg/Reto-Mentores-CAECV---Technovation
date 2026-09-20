@@ -42,6 +42,7 @@ public class EstadisticasServiceImpl implements EstadisticasService {
             String contenidoHtml = generarReporteSemanalAgricultor();
             
             helper.setText(contenidoHtml, true); // true indica que es HTML
+            helper.addInline("orivaLogo", new org.springframework.core.io.ClassPathResource("ORIVA_logo.png"));
             
             mailSender.send(mensaje);
             System.out.println("Reporte enviado con éxito a: " + emailDestino);
@@ -154,6 +155,7 @@ public class EstadisticasServiceImpl implements EstadisticasService {
         reporte.append("<div style='text-align: center;'><img src='").append(chartUrl).append("' alt='Gráfica de actividad' style='max-width: 100%; border-radius: 8px;'/></div>");
 
         reporte.append("<p style='text-align: center; color: #777; margin-top: 30px; font-size: 0.9em;'><i>Gracias por cultivar un futuro sostenible.<br/>El equipo de ORIVA.</i></p>");
+        reporte.append("<div style='text-align: center; margin-top: 15px;'><img src='cid:orivaLogo' alt='Logo ORIVA' style='max-width: 150px;' /></div>");
         reporte.append("</div>");
 
         return reporte.toString();

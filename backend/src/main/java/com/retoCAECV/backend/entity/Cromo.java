@@ -33,6 +33,9 @@ public class Cromo {
     @Column (nullable = false)
     private int puntuacion;
 
+    @Column(length = 500)
+    private String descripcion;
+
     @ElementCollection
     private List<String> atributos = new ArrayList<>();
 

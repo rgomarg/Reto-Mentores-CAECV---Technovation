@@ -98,19 +98,37 @@ export default function CromoDetalle() {
         {/* Contenedor Izquierdo (Cromo) */}
         <div className={`flex-grow flex flex-col items-center py-6 px-4 transition-all duration-300 ${isModalOpen ? 'pr-80' : ''}`}>
           
-          {/* Cabecera de Categoría (Flecha + Texto) */}
-          <div className="w-full max-w-2xl flex items-center mb-8">
-            <button 
-              onClick={() => navigate(-1)}
-              className="mr-4 p-1 rounded-full hover:bg-black/10 transition-colors"
-            >
-              <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8l-4 4 4 4" />
-                <path d="M16 12H8" />
-              </svg>
-            </button>
-            <h2 className="text-2xl sm:text-3xl font-medium tracking-tight">Volver a Álbum</h2>
+          {/* Cabecera de Categoría (Flecha + Texto + Info CAECV) */}
+          <div className="w-full max-w-2xl flex justify-between items-center mb-8">
+            <div className="flex items-center">
+              <button 
+                onClick={() => navigate(-1)}
+                className="mr-3 sm:mr-4 p-1 rounded-full hover:bg-black/10 transition-colors flex-shrink-0"
+              >
+                <svg className="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 8l-4 4 4 4" />
+                  <path d="M16 12H8" />
+                </svg>
+              </button>
+              <h2 className="text-xl sm:text-3xl font-medium tracking-tight">Volver</h2>
+            </div>
+
+            {cromo.nombre.includes('CAECV') && (
+              <div className="group relative z-50">
+                 <div className="flex items-center gap-1.5 sm:gap-2 bg-yellow-50 text-yellow-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold cursor-help border-[2px] border-yellow-300 shadow-sm hover:bg-yellow-100 transition-colors text-sm sm:text-base">
+                    <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span className="hidden sm:inline">¿Qué significa CAECV?</span>
+                    <span className="sm:hidden">CAECV</span>
+                 </div>
+                 {/* Tooltip Wrapper to bridge gap */}
+                 <div className="absolute top-full mt-2 right-0 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                   <div className="w-[280px] sm:w-[320px] bg-white text-gray-800 text-sm leading-relaxed p-5 rounded-xl shadow-2xl border border-gray-200">
+                      Tener el logo del <a href="https://www.caecv.com/" target="_blank" rel="noopener noreferrer" className="text-green-700 font-bold hover:underline pointer-events-auto">CAECV (Comité de Agricultura Ecológica de la Comunitat Valenciana)</a> en un producto significa que ha sido certificado como ecológico y que cumple con todas las normativas de producción ecológica en la última fase de su elaboración dentro de la Comunidad Valenciana.
+                   </div>
+                 </div>
+              </div>
+            )}
           </div>
 
           {/* Cromo Flotante 3D */}
@@ -149,8 +167,8 @@ export default function CromoDetalle() {
                      return <span>Puntos: {puntos}</span>;
                    })()}
                 </div>
-                <div className="text-center font-medium leading-tight">
-                  <p>Información extra o datos curiosos sobre esta carta.</p>
+                <div className="text-center font-medium leading-tight text-sm px-2 mt-2 text-gray-800">
+                  <p>{cromo.descripcion}</p>
                 </div>
               </div>
             </div>
