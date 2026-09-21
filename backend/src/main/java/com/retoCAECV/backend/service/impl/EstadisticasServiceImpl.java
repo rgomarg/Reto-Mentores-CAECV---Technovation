@@ -124,7 +124,13 @@ public class EstadisticasServiceImpl implements EstadisticasService {
 
         // Generar URL de la gráfica con QuickChart
         String chartData = "[" + datosPorDia[0] + "," + datosPorDia[1] + "," + datosPorDia[2] + "," + datosPorDia[3] + "," + datosPorDia[4] + "," + datosPorDia[5] + "," + datosPorDia[6] + "]";
-        String chartUrl = "https://quickchart.io/chart?c={type:'bar',data:{labels:['L','M','X','J','V','S','D'],datasets:[{label:'Familias descubriendo tus productos',backgroundColor:'rgb(193,198,154)',data:" + chartData + "}]}}";
+        String chartConfig = "{type:'bar',data:{labels:['L','M','X','J','V','S','D'],datasets:[{label:'Familias descubriendo tus productos',backgroundColor:'rgb(193,198,154)',data:" + chartData + "}]}}";
+        String chartUrl = "";
+        try {
+            chartUrl = "https://quickchart.io/chart?c=" + java.net.URLEncoder.encode(chartConfig, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException e) {
+            chartUrl = "https://quickchart.io/chart?c=" + chartConfig;
+        }
 
         // Construir el reporte en HTML
         StringBuilder reporte = new StringBuilder();

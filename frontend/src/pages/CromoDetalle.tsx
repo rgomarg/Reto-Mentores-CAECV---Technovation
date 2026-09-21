@@ -118,13 +118,13 @@ export default function CromoDetalle() {
               <div className="group relative z-50">
                  <div className="flex items-center gap-1.5 sm:gap-2 bg-yellow-50 text-yellow-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold cursor-help border-[2px] border-yellow-300 shadow-sm hover:bg-yellow-100 transition-colors text-sm sm:text-base">
                     <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span className="hidden sm:inline">¿Qué significa CAECV?</span>
+                    <span className="hidden sm:inline">¿Certificación CAECV?</span>
                     <span className="sm:hidden">CAECV</span>
                  </div>
                  {/* Tooltip Wrapper to bridge gap */}
                  <div className="absolute top-full mt-2 right-0 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                    <div className="w-[280px] sm:w-[320px] bg-white text-gray-800 text-sm leading-relaxed p-5 rounded-xl shadow-2xl border border-gray-200">
-                      Tener el logo del <a href="https://www.caecv.com/" target="_blank" rel="noopener noreferrer" className="text-green-700 font-bold hover:underline pointer-events-auto">CAECV (Comité de Agricultura Ecológica de la Comunitat Valenciana)</a> en un producto significa que ha sido certificado como ecológico y que cumple con todas las normativas de producción ecológica en la última fase de su elaboración dentro de la Comunidad Valenciana.
+                      Tener la certificación del <a href="https://www.caecv.com/" target="_blank" rel="noopener noreferrer" className="text-green-700 font-bold hover:underline pointer-events-auto">CAECV (Comité de Agricultura Ecológica de la Comunitat Valenciana)</a> en un producto significa que ha sido certificado como ecológico y que cumple con todas las normativas de producción ecológica en la última fase de su elaboración dentro de la Comunidad Valenciana.
                    </div>
                  </div>
               </div>
@@ -174,19 +174,19 @@ export default function CromoDetalle() {
             </div>
           </div>
 
-          {/* Botón Añadir modificador */}
+          {/* Botón Añadir potenciador */}
           {usuarioCromo && (
             <div className="mt-12">
               {hasPotenciador ? (
                 <button disabled className="bg-gray-400 text-white font-semibold py-4 px-8 rounded-xl shadow-inner cursor-not-allowed text-xl transition-all">
-                   Modificador Activo
+                   Potenciador Activo
                 </button>
               ) : (
                 <button 
                    onClick={openSidebar}
                    className="bg-[#C1C69A] hover:bg-[#b0b588] text-[#1C201C] font-semibold py-4 px-10 rounded-xl shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:shadow-md transition-all text-xl"
                 >
-                   Añadir modificador
+                   Añadir potenciador
                 </button>
               )}
             </div>
@@ -208,7 +208,7 @@ export default function CromoDetalle() {
         >
           {/* Header Sidebar */}
           <div className="p-6 border-b flex justify-between items-center bg-[#FCF6DF]">
-            <h3 className="text-2xl font-bold">Modificadores</h3>
+            <h3 className="text-2xl font-bold">Potenciadores</h3>
             <button 
               onClick={() => setIsModalOpen(false)}
               className="p-2 rounded-full hover:bg-black/10 transition-colors"
@@ -222,7 +222,7 @@ export default function CromoDetalle() {
           {/* Lista de Potenciadores */}
           <div className="flex-grow overflow-y-auto p-6">
             {userPotenciadores.length === 0 ? (
-              <p className="text-center text-gray-500 mt-10">No tienes modificadores disponibles.</p>
+              <p className="text-center text-gray-500 mt-10">No tienes potenciadores disponibles.</p>
             ) : (
               <div className="grid grid-cols-2 gap-4">
                 {userPotenciadores.map((up: any) => (
