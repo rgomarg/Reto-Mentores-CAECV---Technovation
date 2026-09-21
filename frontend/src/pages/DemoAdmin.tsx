@@ -16,7 +16,7 @@ export default function DemoAdmin() {
     setEstadoEmail('Enviando...');
     
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/enviar-demo?correo=${encodeURIComponent(correo)}`, {
+      const response = await fetch(`/api/admin/enviar-demo?correo=${encodeURIComponent(correo)}`, {
         method: 'POST'
       });
 
@@ -38,7 +38,7 @@ export default function DemoAdmin() {
   const poblarDatos = async () => {
     setEstadoDatos('Generando escaneos falsos...');
     try {
-      const response = await fetch('http://localhost:8080/api/admin/poblar-datos', {
+      const response = await fetch('/api/admin/poblar-datos', {
         method: 'POST'
       });
       const text = await response.text();

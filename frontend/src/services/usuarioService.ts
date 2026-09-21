@@ -13,7 +13,7 @@ export interface UsuarioRankingDTO extends UsuarioDTO {
 }
 
 export async function crearUsuario(nombre: string) {
-  const response = await fetch("http://localhost:8080/usuarios", {
+  const response = await fetch("/api/usuarios", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
